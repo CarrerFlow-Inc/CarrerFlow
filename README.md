@@ -67,7 +67,3 @@ CarreFlow/
 ## 📄 Licença
 *(Adicionar tipo de licença escolhida, ex: MIT, Apache 2.0, etc.)*  
 
-
-
-# CarreFlow
-# CarreFlow
