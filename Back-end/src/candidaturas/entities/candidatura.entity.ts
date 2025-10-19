@@ -1,16 +1,16 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 
-// export enum StatusCandidatura {
-//     APLICADA = 'Aplicada',
-//     ENTREVISTA_RH = 'Entrevista com TH',
-//     ENTREVISTA_TECNICA = 'Entrevista Técnica',
-//     ENTREVISTA_FINAL = 'Entrevista Final',
-//     OFERTA_RECEBIDA = 'Oferta Recebida',
-//     ACEITA = 'Aceita',
-//     REJEITADA = 'Rejeitada',
-//     CANCELADA = 'Cancelada',
-// }
+export enum StatusCandidatura {
+    APLICADA = 'Aplicada',
+    ENTREVISTA_RH = 'Entrevista com TH',
+    ENTREVISTA_TECNICA = 'Entrevista Técnica',
+    ENTREVISTA_FINAL = 'Entrevista Final',
+    OFERTA_RECEBIDA = 'Oferta Recebida',
+    ACEITA = 'Aceita',
+    REJEITADA = 'Rejeitada',
+    CANCELADA = 'Cancelada',
+}
 
 @Entity('candidaturas')
 export class Candidatura {
@@ -45,17 +45,16 @@ export class Candidatura {
     @Column()
     dataCandidatura!: Date;
 
-    // @ApiProperty({
-    // description: 'Status atual da candidatura',
-    // enum: StatusCandidatura,
-    // example: StatusCandidatura.APLICADA,
-    // })
-    // @Column({
-    //     type: 'enum',
-    //     enum: StatusCandidatura,
-    //     default: StatusCandidatura.APLICADA,
-    // })
-    // status!: StatusCandidatura;
+    @ApiProperty({
+    description: 'Status atual da candidatura',
+    enum: StatusCandidatura,
+    example: StatusCandidatura.APLICADA,
+    })
+    @Column({
+        type: 'text',
+        default: StatusCandidatura.APLICADA,
+    })
+    status!: StatusCandidatura;
 
     @ApiProperty({
     description: 'Anotações sobre a candidatura',
@@ -69,13 +68,15 @@ export class Candidatura {
     description: 'Data de criação do registro',
     example: '2025-10-15T10:30:00.000Z',
     })
-    @CreateDateColumn()
+    // Mapear explicitamente para o nome de coluna `createdAt` usado em queries
+    @CreateDateColumn({ name: 'createdAt' })
     dataCriacao!: Date;
 
     @ApiProperty({
     description: 'Data da última atualização',
     example: '2025-10-16T14:20:00.000Z',
     })
-    @UpdateDateColumn()
+    // Mapear explicitamente para o nome de coluna `updatedAt` usado em queries
+    @UpdateDateColumn({ name: 'updatedAt' })
     dataAtualizacao!: Date;
 }

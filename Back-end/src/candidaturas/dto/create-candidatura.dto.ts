@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, IsString } from "class-validator";
-// import { StatusCandidatura } from "../entities/candidatura.entity";
+import { StatusCandidatura } from "../entities/candidatura.entity";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export class CreateCandidaturaDto {
@@ -38,13 +38,13 @@ export class CreateCandidaturaDto {
     @IsOptional()
     observacoes?: string;
 
-    // @ApiPropertyOptional({
-    // description: 'Status atual da candidatura',
-    // enum: StatusCandidatura,
-    // default: StatusCandidatura.APLICADA,
-    // example: StatusCandidatura.APLICADA,
-    // })
-    // @IsEnum(StatusCandidatura)
-    // @IsOptional()
-    // status?: StatusCandidatura;
+    @ApiPropertyOptional({
+    description: 'Status atual da candidatura',
+    enum: StatusCandidatura,
+    default: StatusCandidatura.APLICADA,
+    example: StatusCandidatura.APLICADA,
+    })
+    @IsEnum(StatusCandidatura)
+    @IsOptional()
+    status?: StatusCandidatura;
 }

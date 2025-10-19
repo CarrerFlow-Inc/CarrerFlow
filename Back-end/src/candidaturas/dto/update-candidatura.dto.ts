@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateCandidaturaDto } from './create-candidatura.dto';
-// import { StatusCandidatura } from '../entities/candidatura.entity';
+import { StatusCandidatura } from '../entities/candidatura.entity';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -39,12 +39,12 @@ export class UpdateCandidaturaDto extends PartialType(CreateCandidaturaDto) {
     @IsString()
     observacoes?: string;
 
-    // @ApiPropertyOptional({
-    // description: 'Status atual da candidatura',
-    // enum: StatusCandidatura,
-    // example: StatusCandidatura.ENTREVISTA_RH,
-    // })
-    // @IsOptional()
-    // @IsEnum(StatusCandidatura)
-    // status?: StatusCandidatura;
+    @ApiPropertyOptional({
+    description: 'Status atual da candidatura',
+    enum: StatusCandidatura,
+    example: StatusCandidatura.ENTREVISTA_RH,
+    })
+    @IsOptional()
+    @IsEnum(StatusCandidatura)
+    status?: StatusCandidatura;
 }

@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateCandidaturaDto } from './dto/create-candidatura.dto';
 import { UpdateCandidaturaDto } from './dto/update-candidatura.dto';
 import { FilterCandidaturaDto } from './dto/filter-candidatura.dto';
-import { Candidatura } from './entities/candidatura.entity';
+import { Candidatura, StatusCandidatura } from './entities/candidatura.entity';
 
 @Injectable()
 export class CandidaturasService {
@@ -17,34 +17,35 @@ export class CandidaturasService {
   async create(createCandidaturaDto: CreateCandidaturaDto): Promise<Candidatura> {
     const candidatura = this.candidaturasRepository.create({
       ...createCandidaturaDto,
-      // status: createCandidaturaDto.status || StatusCandidatura.APLICADA,
+      status: createCandidaturaDto.status || StatusCandidatura.APLICADA,
     });
     return await this.candidaturasRepository.save(candidatura);
   }
 
   //Listar todas as candidaturas com filtros opcionais
-  async findAll(filterDto: FilterCandidaturaDto): Promise<Candidatura[]> {
-    const { search, sortBy = 'createdAt', orderBy = 'DESC' } = filterDto;
-
-    const query = this.candidaturasRepository
+  async findAll(filterDto: FilterCandidaturaDto): Promise<Candidatura[]>{
+    const { status, search, sortBy = 'createdAt', orderBy = 'DESC' } = filterDto;
+    
+    const queryBuider = this.candidaturasRepository
       .createQueryBuilder('candidatura');
 
-    //Filtro por status
+    //Busca por status
     if (status) {
-      query.andWhere('candidatura.status = :status', { status });
+      queryBuider.andWhere('candidatura.status = :status', { status});
     }
 
-    //Busca por empresa ou vaga
-    if(search) {
-      query.andWhere(
-        '(candidatura.nomeEmpresa ILIKE :search OR candidatura.nomeVaga ILIKE :search)',
-        { search: `%${search}%` },
+    //Busca por vaga
+    if (search) {
+      queryBuider.andWhere(
+        '(candidatura.nomeEmpresa ILIKE :search OR candidatura.tituloVaga ILIKE :search)',
+        { search: `%${search}`},
       );
     }
-    
+
     //Ordenação
-    query.orderBy(`candidatura.${sortBy}`, orderBy);
-    return await query.getMany();
+    queryBuider.orderBy(`candidatura.${sortBy}`, orderBy.toUpperCase() as 'ASC' | 'DESC');
+
+    return await queryBuider.getMany();
   }
 
   //Buscar candidatura por ID

@@ -55,7 +55,7 @@ async function bootstrap() {
       'contato@carrerflow.com'
     )
     .setLicense('MIT', 'https://opensource.org/licenses/MIT')
-    .addServer('http://localhost:3001', 'Desenvolvimento Local')
+    .addServer('http://localhost:3000', 'Desenvolvimento Local')
     .addServer('https://api.carrerflow.com', 'Produção')
     .build();
 

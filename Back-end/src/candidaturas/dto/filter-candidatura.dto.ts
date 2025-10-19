@@ -1,16 +1,16 @@
 import { IsEnum, IsOptional, IsString } from "class-validator";
-// import { StatusCandidatura } from "../entities/candidatura.entity";
+import { StatusCandidatura } from "../entities/candidatura.entity";
 import { ApiPropertyOptional } from "@nestjs/swagger";
 
 export class FilterCandidaturaDto {
-    // @ApiPropertyOptional({
-    // description: 'Filtrar candidaturas por status',
-    // enum: StatusCandidatura,
-    // example: StatusCandidatura.APLICADA,
-    // })
-    // @IsEnum(StatusCandidatura)
-    // @IsOptional()
-    // status?: StatusCandidatura;
+    @ApiPropertyOptional({
+    description: 'Filtrar candidaturas por status',
+    enum: StatusCandidatura,
+    example: StatusCandidatura.APLICADA,
+    })
+    @IsEnum(StatusCandidatura)
+    @IsOptional()
+    status?: StatusCandidatura;
 
     @ApiPropertyOptional({
     description: 'Buscar por nome da empresa ou título da vaga',
