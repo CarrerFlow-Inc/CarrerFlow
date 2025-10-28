@@ -33,7 +33,8 @@ export class UsersController {
   @Get()
   @ApiOperation({
     summary: 'Listar todos os usuários',
-    description: 'Retorna uma lista de todos os usuários cadastrados no sistema.',
+    description:
+      'Retorna uma lista de todos os usuários cadastrados no sistema.',
   })
   @ApiResponse({
     status: 200,
@@ -98,7 +99,7 @@ export class UsersController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<Omit<User, "password">> {
+  ): Promise<Omit<User, 'password'>> {
     return this.usersService.update(id, updateUserDto);
   }
 

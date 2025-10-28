@@ -66,7 +66,10 @@ describe('CandidaturasController', () => {
 
       const result = await controller.create(createdCandidaturaDto);
 
-      expect(candidaturasService.create).toHaveBeenCalledWith(createdCandidaturaDto, '1');
+      expect(candidaturasService.create).toHaveBeenCalledWith(
+        createdCandidaturaDto,
+        '1',
+      );
       expect(result).toEqual(createdCandidaturas);
     });
   });
@@ -132,7 +135,10 @@ describe('CandidaturasController', () => {
 
       const result = await controller.update('1', updateCandidaturaDto);
 
-      expect(candidaturasService.update).toHaveBeenCalledWith('1', updateCandidaturaDto);
+      expect(candidaturasService.update).toHaveBeenCalledWith(
+        '1',
+        updateCandidaturaDto,
+      );
       expect(result).toEqual(updateApplication);
     });
   });
@@ -141,7 +147,7 @@ describe('CandidaturasController', () => {
     it('should remove an application', async () => {
       mockApplicationsService.remove.mockResolvedValue(undefined);
 
-      const result = await controller.remove("1");
+      const result = await controller.remove('1');
 
       expect(candidaturasService.remove).toHaveBeenCalledWith('1');
       expect(result).toBeUndefined();

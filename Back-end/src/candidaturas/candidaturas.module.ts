@@ -9,5 +9,4 @@ import { Candidatura } from './entities/candidatura.entity';
   controllers: [CandidaturasController],
   providers: [CandidaturasService],
 })
-
 export class CandidaturasModule {}

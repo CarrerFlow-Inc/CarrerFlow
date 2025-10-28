@@ -44,7 +44,9 @@ describe('ApplicationsService', () => {
     }).compile();
 
     service = module.get<CandidaturasService>(CandidaturasService);
-    repository = module.get<Repository<Candidatura>>(getRepositoryToken(Candidatura));
+    repository = module.get<Repository<Candidatura>>(
+      getRepositoryToken(Candidatura),
+    );
   });
 
   it('should be defined', () => {
@@ -56,7 +58,7 @@ describe('ApplicationsService', () => {
       const createApplicationDto: CreateCandidaturaDto = {
         nomeEmpresa: 'Test Company',
         tituloVaga: 'Software Developer',
-        dataCandidatura: new Date ('2023-01-01'),
+        dataCandidatura: new Date('2023-01-01'),
       };
 
       const candidatura = {
@@ -114,10 +116,13 @@ describe('ApplicationsService', () => {
 
       mockQueryBuilder.getMany.mockResolvedValue(candidatura);
 
-  const result = await service.findAll(filterDto);
+      const result = await service.findAll(filterDto);
 
-  expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith('candidatura.status = :status', { status: StatusCandidatura.APLICADA });
-  expect(result).toEqual(candidatura);
+      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
+        'candidatura.status = :status',
+        { status: StatusCandidatura.APLICADA },
+      );
+      expect(result).toEqual(candidatura);
     });
   });
 
@@ -140,9 +145,9 @@ describe('ApplicationsService', () => {
     });
 
     it('should throw NotFoundException if application not found', async () => {
-  mockRepository.findOne.mockResolvedValue(null);
+      mockRepository.findOne.mockResolvedValue(null);
 
-  await expect(service.findOne('1')).rejects.toThrow(NotFoundException);
+      await expect(service.findOne('1')).rejects.toThrow(NotFoundException);
     });
 
     // Authorization is not handled in service.findOne; skip ForbiddenException test
@@ -166,14 +171,14 @@ describe('ApplicationsService', () => {
         status: StatusCandidatura.ENTREVISTA_RH,
       };
 
-  jest.spyOn(service, 'findOne').mockResolvedValue(candidatura as any);
-  mockRepository.save.mockResolvedValue(updatedCandidatura);
+      jest.spyOn(service, 'findOne').mockResolvedValue(candidatura as any);
+      mockRepository.save.mockResolvedValue(updatedCandidatura);
 
-  const result = await service.update('1', updateCandidaturaDto);
+      const result = await service.update('1', updateCandidaturaDto);
 
-  expect(service.findOne).toHaveBeenCalledWith('1');
-  expect(repository.save).toHaveBeenCalled();
-  expect(result).toEqual(updatedCandidatura);
+      expect(service.findOne).toHaveBeenCalledWith('1');
+      expect(repository.save).toHaveBeenCalled();
+      expect(result).toEqual(updatedCandidatura);
     });
   });
 
@@ -185,13 +190,13 @@ describe('ApplicationsService', () => {
         userId: '1',
       };
 
-  jest.spyOn(service, 'findOne').mockResolvedValue(candidatura as any);
-  mockRepository.remove.mockResolvedValue(candidatura);
+      jest.spyOn(service, 'findOne').mockResolvedValue(candidatura as any);
+      mockRepository.remove.mockResolvedValue(candidatura);
 
-  await service.remove('1');
+      await service.remove('1');
 
-  expect(service.findOne).toHaveBeenCalledWith('1');
-  expect(repository.remove).toHaveBeenCalledWith(candidatura);
+      expect(service.findOne).toHaveBeenCalledWith('1');
+      expect(repository.remove).toHaveBeenCalledWith(candidatura);
     });
   });
 

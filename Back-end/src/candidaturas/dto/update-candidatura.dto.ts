@@ -5,46 +5,46 @@ import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateCandidaturaDto extends PartialType(CreateCandidaturaDto) {
-    @ApiPropertyOptional({
+  @ApiPropertyOptional({
     description: 'Nome da empresa',
     example: 'Tech Solutions',
-    })
-    @IsString()
-    @IsOptional()
-    nomeEmpresa?: string;
+  })
+  @IsString()
+  @IsOptional()
+  nomeEmpresa?: string;
 
-    @ApiPropertyOptional({
+  @ApiPropertyOptional({
     description: 'Título da vaga',
     example: 'Desenvolvedor Full Stack Júnior',
-    })
-    @IsString()
-    @IsOptional()
-    tituloVaga?: string;
+  })
+  @IsString()
+  @IsOptional()
+  tituloVaga?: string;
 
-    @ApiPropertyOptional({
+  @ApiPropertyOptional({
     description: 'Data de aplicação da candidatura',
     example: '2025-10-15',
     type: String,
     format: 'date',
-    })
-    @IsOptional()
-    @IsString()
-    dataCandidatura?: Date;
+  })
+  @IsOptional()
+  @IsString()
+  dataCandidatura?: Date;
 
-    @ApiPropertyOptional({
+  @ApiPropertyOptional({
     description: 'Anotações sobre a candidatura',
     example: 'Primeira entrevista realizada. Aguardando retorno.',
-    })
-    @IsOptional()
-    @IsString()
-    observacoes?: string;
+  })
+  @IsOptional()
+  @IsString()
+  observacoes?: string;
 
-    @ApiPropertyOptional({
+  @ApiPropertyOptional({
     description: 'Status atual da candidatura',
     enum: StatusCandidatura,
     example: StatusCandidatura.ENTREVISTA_RH,
-    })
-    @IsOptional()
-    @IsEnum(StatusCandidatura)
-    status?: StatusCandidatura;
+  })
+  @IsOptional()
+  @IsEnum(StatusCandidatura)
+  status?: StatusCandidatura;
 }

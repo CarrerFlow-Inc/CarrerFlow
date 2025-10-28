@@ -14,44 +14,60 @@ export class CandidaturasService {
   ) {}
 
   //Cria nova candidatura
-  async create(createCandidaturaDto: CreateCandidaturaDto): Promise<Candidatura> {
+  async create(
+    createCandidaturaDto: CreateCandidaturaDto,
+    userId: number,
+  ): Promise<Candidatura> {
     const candidatura = this.candidaturasRepository.create({
       ...createCandidaturaDto,
+      userId,
       status: createCandidaturaDto.status || StatusCandidatura.APLICADA,
     });
     return await this.candidaturasRepository.save(candidatura);
   }
 
   //Listar todas as candidaturas com filtros opcionais
-  async findAll(filterDto: FilterCandidaturaDto): Promise<Candidatura[]>{
-    const { status, search, sortBy = 'createdAt', orderBy = 'DESC' } = filterDto;
-    
+  async findAll(
+    filterDto: FilterCandidaturaDto,
+    userId: number,
+  ): Promise<Candidatura[]> {
+    const {
+      status,
+      search,
+      sortBy = 'createdAt',
+      orderBy = 'DESC',
+    } = filterDto;
+
     const queryBuider = this.candidaturasRepository
-      .createQueryBuilder('candidatura');
+      .createQueryBuilder('candidatura')
+      .where('candidatura.userId = :userId', { userId });
 
     //Busca por status
     if (status) {
-      queryBuider.andWhere('candidatura.status = :status', { status});
+      queryBuider.andWhere('candidatura.status = :status', { status });
     }
 
     //Busca por vaga
     if (search) {
       queryBuider.andWhere(
         '(candidatura.nomeEmpresa ILIKE :search OR candidatura.tituloVaga ILIKE :search)',
-        { search: `%${search}`},
+        { search: `%${search}` },
       );
     }
 
     //Ordenação
-    queryBuider.orderBy(`candidatura.${sortBy}`, orderBy.toUpperCase() as 'ASC' | 'DESC');
+    queryBuider.orderBy(
+      `candidatura.${sortBy}`,
+      orderBy.toUpperCase() as 'ASC' | 'DESC',
+    );
 
     return await queryBuider.getMany();
   }
 
   //Buscar candidatura por ID
-  async findOne(id: string): Promise<Candidatura> {
+  async findOne(id: string, userId: number): Promise<Candidatura> {
     const candidatura = await this.candidaturasRepository.findOne({
-      where: { id },
+      where: { id, userId },
     });
 
     if (!candidatura) {
@@ -65,8 +81,9 @@ export class CandidaturasService {
   async update(
     id: string,
     UpdateCandidaturaDto: UpdateCandidaturaDto,
+    userId: number,
   ): Promise<Candidatura> {
-    const candidatura = await this.findOne(id);
+    const candidatura = await this.findOne(id, userId);
 
     Object.assign(candidatura, UpdateCandidaturaDto);
 
@@ -74,8 +91,8 @@ export class CandidaturasService {
   }
 
   //Remover uma candidatura
-  async remove(id: string): Promise<void> {
-    const candidatura = await this.findOne(id);
+  async remove(id: string, userId: number): Promise<void> {
+    const candidatura = await this.findOne(id, userId);
     await this.candidaturasRepository.remove(candidatura);
   }
 }

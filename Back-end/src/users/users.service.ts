@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -12,8 +16,6 @@ export class UsersService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
-
-
 
   async findAll(): Promise<Omit<User, 'password'>[]> {
     const users = await this.userRepository.find({
@@ -39,7 +41,10 @@ export class UsersService {
     return this.userRepository.findOne({ where: { email } });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<Omit<User, 'password'>> {
+  async update(
+    id: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<Omit<User, 'password'>> {
     const user = await this.userRepository.findOne({ where: { id } });
 
     if (!user) {
@@ -49,7 +54,7 @@ export class UsersService {
     // Check if email is being updated and if it already exists
     if (updateUserDto.email && updateUserDto.email !== user.email) {
       const existingUser = await this.userRepository.findOne({
-        where: { email: updateUserDto.email }
+        where: { email: updateUserDto.email },
       });
       if (existingUser) {
         throw new ConflictException('Usuário com este email já existe');
@@ -59,7 +64,10 @@ export class UsersService {
     // Hash password if it's being updated
     if (updateUserDto.password) {
       const saltRounds = 10;
-      updateUserDto.password = await bcrypt.hash(updateUserDto.password, saltRounds);
+      updateUserDto.password = await bcrypt.hash(
+        updateUserDto.password,
+        saltRounds,
+      );
     }
 
     // Update user

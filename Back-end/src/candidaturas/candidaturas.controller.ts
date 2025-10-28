@@ -1,9 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  Query,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
+import type { Request } from 'express';
 import { CandidaturasService } from './candidaturas.service';
 import { CreateCandidaturaDto } from './dto/create-candidatura.dto';
 import { UpdateCandidaturaDto } from './dto/update-candidatura.dto';
 import { FilterCandidaturaDto } from './dto/filter-candidatura.dto';
-import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { Candidatura } from './entities/candidatura.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -19,7 +41,8 @@ export class CandidaturasController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Criar uma nova candidatura',
-    description: 'Registra uma nova candidatura no sistema. O status inicial será "Aplicada".',
+    description:
+      'Registra uma nova candidatura no sistema. O status inicial será "Aplicada".',
   })
   @ApiBody({ type: CreateCandidaturaDto })
   @ApiResponse({
@@ -31,21 +54,35 @@ export class CandidaturasController {
     status: 400,
     description: 'Dados inválidos fornecidos.',
   })
-  create(@Body() createCandidaturaDto: CreateCandidaturaDto) {
-    return this.candidaturasService.create(createCandidaturaDto);
+  create(
+    @Body() createCandidaturaDto: CreateCandidaturaDto,
+    @Req() req: Request,
+  ) {
+    const userId = req.user!['userId'];
+    return this.candidaturasService.create(createCandidaturaDto, userId);
   }
 
   //Listar todas as candidaturas com filtros opcionais
   @Get()
   @ApiOperation({
     summary: 'Listar candidaturas',
-    description: 'Retorna todas as candidaturas cadastradas. Suporta filtros por status, busca textual, ordenação e direção.',
+    description:
+      'Retorna todas as candidaturas cadastradas. Suporta filtros por status, busca textual, ordenação e direção.',
   })
   @ApiQuery({
     name: 'status',
     required: false,
     description: 'Filtrar por status da candidatura',
-    enum: ['Aplicada', 'Entrevista RH', 'Entrevista Técnica', 'Entrevista Gestor', 'Oferta Recebida', 'Aceita', 'Rejeitada', 'Cancelada'],
+    enum: [
+      'Aplicada',
+      'Entrevista RH',
+      'Entrevista Técnica',
+      'Entrevista Gestor',
+      'Oferta Recebida',
+      'Aceita',
+      'Rejeitada',
+      'Cancelada',
+    ],
   })
   @ApiQuery({
     name: 'search',
@@ -70,15 +107,17 @@ export class CandidaturasController {
     description: 'Lista de candidaturas retornada com sucesso',
     type: [Candidatura],
   })
-  findAll(@Query() filterDto: FilterCandidaturaDto) {
-    return this.candidaturasService.findAll(filterDto);
+  findAll(@Query() filterDto: FilterCandidaturaDto, @Req() req: Request) {
+    const userId = req.user!['userId'];
+    return this.candidaturasService.findAll(filterDto, userId);
   }
 
   //Retorna detalhes de uma candidatura pelo ID
   @Get(':id')
   @ApiOperation({
     summary: 'Obter detalhes da candidatura',
-    description: 'Retorna todas as informações de uma candidatura específica pelo ID.',
+    description:
+      'Retorna todas as informações de uma candidatura específica pelo ID.',
   })
   @ApiParam({
     name: 'id',
@@ -94,15 +133,17 @@ export class CandidaturasController {
     status: 404,
     description: 'Candidatura não encontrada',
   })
-  findOne(@Param('id') id: string) {
-    return this.candidaturasService.findOne(id);
+  findOne(@Param('id') id: string, @Req() req: Request) {
+    const userId = req.user!['userId'];
+    return this.candidaturasService.findOne(id, userId);
   }
 
   //Atualiza uma candidatura existente
   @Patch(':id')
   @ApiOperation({
     summary: 'Atualizar candidatura',
-    description: 'Atualiza informações de uma candidatura existente. Apenas os campos fornecidos serão atualizados.',
+    description:
+      'Atualiza informações de uma candidatura existente. Apenas os campos fornecidos serão atualizados.',
   })
   @ApiParam({
     name: 'id',
@@ -125,9 +166,11 @@ export class CandidaturasController {
   })
   update(
     @Param('id') id: string,
-    @Body() updateCandidaturaDto: UpdateCandidaturaDto
+    @Body() updateCandidaturaDto: UpdateCandidaturaDto,
+    @Req() req: Request,
   ) {
-    return this.candidaturasService.update(id, updateCandidaturaDto);
+    const userId = req.user!['userId'];
+    return this.candidaturasService.update(id, updateCandidaturaDto, userId);
   }
 
   //Remove uma candidatura
@@ -150,7 +193,8 @@ export class CandidaturasController {
     status: 404,
     description: 'Candidatura não encontrada',
   })
-  async remove(@Param('id') id: string) {
-    await this.candidaturasService.remove(id);
+  async remove(@Param('id') id: string, @Req() req: Request) {
+    const userId = req.user!['userId'];
+    await this.candidaturasService.remove(id, userId);
   }
 }

@@ -1,98 +1,76 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🚀 Back-End do CarrerFlow
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Bem-vindo ao **back-end** do CarrerFlow! Esta é a parte do projeto que roda no servidor e cuida da lógica principal, como salvar dados, fazer login e gerenciar candidaturas a vagas de emprego. Usamos o NestJS, uma ferramenta simples para criar APIs (interfaces que conectam o front-end com o banco de dados).
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+O back-end já tem funcionalidades básicas, como autenticação de usuários e controle de candidaturas. Ele usa um banco de dados SQLite para armazenar as informações.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🛠️ Como Usar Este Back-End
 
-## Project setup
+### 1. Clonar o Projeto
+Primeiro, baixe o código do projeto para o seu computador. Você precisa ter o Git instalado (é gratuito e fácil de baixar).
+
+Abra o terminal (no Windows, use o Prompt de Comando) e digite:
 
 ```bash
-$ npm install
+git clone https://github.com/CarrerFlow-Inc/CarrerFlow.git
+cd CarrerFlow
 ```
 
-## Compile and run the project
+### 2. Instalar as Dependências
+Entre na pasta do back-end e instale as bibliotecas necessárias. Você precisa do Node.js instalado (baixe em nodejs.org).
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cd Back-end
+npm install
 ```
 
-## Run tests
+Isso vai baixar tudo que o projeto precisa para funcionar.
+
+### 3. Rodar o Servidor
+Para testar o back-end, rode o servidor em modo de desenvolvimento (ele reinicia automaticamente quando você muda o código):
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run start:dev
 ```
 
-## Deployment
+O servidor vai ficar rodando em `http://localhost:3000`. Você pode testar as APIs usando ferramentas como Postman ou até o navegador.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Outros comandos úteis:
+- `npm run start` - Roda o servidor normalmente.
+- `npm run build` - Compila o código para produção.
+- `npm run test` - Roda os testes automáticos.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+## 🤝 Como Contribuir
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Quer ajudar a melhorar o back-end? Ótimo! Leia o guia de contribuição na raiz do projeto: [CONTRIBUTING.md](../CONTRIBUTING.md). Lá explica como criar branches, fazer mudanças e enviar pull requests.
 
-## Resources
+Dicas rápidas:
+- Trabalhe apenas nesta pasta (Back-end/).
+- Teste suas mudanças antes de enviar.
+- Use commits claros, como "Adiciona validação no login".
 
-Check out a few resources that may come in handy when working with NestJS:
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## 📂 Estrutura da Pasta
 
-## Support
+Aqui vai uma explicação simples das pastas dentro de `Back-end/`:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- `src/` - Código principal do back-end.
+  - `auth/` - Lógica de login e autenticação.
+  - `candidaturas/` - Gerenciamento de candidaturas a vagas.
+  - `users/` - Controle de usuários.
+  - `app.module.ts` - Arquivo principal que conecta tudo.
+- `test/` - Testes automáticos.
+- `package.json` - Lista de dependências e comandos.
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 📄 Licença
 
-## License
+Este projeto usa a licença MIT (livre para usar e modificar).
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Se tiver dúvidas, abra uma issue no GitHub ou pergunte no grupo!

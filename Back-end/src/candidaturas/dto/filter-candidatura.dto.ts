@@ -1,42 +1,42 @@
-import { IsEnum, IsOptional, IsString } from "class-validator";
-import { StatusCandidatura } from "../entities/candidatura.entity";
-import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { StatusCandidatura } from '../entities/candidatura.entity';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class FilterCandidaturaDto {
-    @ApiPropertyOptional({
+  @ApiPropertyOptional({
     description: 'Filtrar candidaturas por status',
     enum: StatusCandidatura,
     example: StatusCandidatura.APLICADA,
-    })
-    @IsEnum(StatusCandidatura)
-    @IsOptional()
-    status?: StatusCandidatura;
+  })
+  @IsEnum(StatusCandidatura)
+  @IsOptional()
+  status?: StatusCandidatura;
 
-    @ApiPropertyOptional({
+  @ApiPropertyOptional({
     description: 'Buscar por nome da empresa ou título da vaga',
     example: 'Tech',
-    })
-    @IsString()
-    @IsOptional()
-    search?: string;
+  })
+  @IsString()
+  @IsOptional()
+  search?: string;
 
-    @ApiPropertyOptional({
+  @ApiPropertyOptional({
     description: 'Campo para ordenação',
     enum: ['applicationDate', 'companyName', 'createdAt'],
     default: 'createdAt',
     example: 'applicationDate',
-    })
-    @IsString()
-    @IsOptional()
-    sortBy?: string;
+  })
+  @IsString()
+  @IsOptional()
+  sortBy?: string;
 
-    @ApiPropertyOptional({
+  @ApiPropertyOptional({
     description: 'Ordem de classificação',
     enum: ['ASC', 'DESC'],
     default: 'DESC',
     example: 'DESC',
-    })
-    @IsString()
-    @IsOptional()
-    orderBy?: 'ASC' | 'DESC';
+  })
+  @IsString()
+  @IsOptional()
+  orderBy?: 'ASC' | 'DESC';
 }

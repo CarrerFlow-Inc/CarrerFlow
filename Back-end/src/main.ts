@@ -9,7 +9,11 @@ async function bootstrap() {
 
   //Habilita CORS
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:5173',
+      'http://localhost:5174',
+    ],
     credentials: true,
   });
 
@@ -33,17 +37,17 @@ async function bootstrap() {
     .setTitle('CarrerFlow API')
     .setDescription(
       'API REST para gerenciamento de candidaturas de emprego.\n\n' +
-      '## Sobre o Projeto\n' +
-      'CarrerFlow é uma plataforma web desenvolvida para permitir que candidatos cadastrem, ' +
-      'visualizem e gerenciem suas candidaturas de emprego em um único local centralizado.\n\n' +
-      '## Versão MVP\n' +
-      'Esta é a versão MVP simplificada focada exclusivamente no CRUD de candidaturas. ' +
-      'A autenticação será implementada nas próximas sprints.\n\n' +
-      '## Equipe\n' +
-      '- Product Owner: Evellyn\n' +
-      '- Scrum Master: Italo\n' +
-      '- Desenvolvedores: Victor, Juarez, Carlos Eduardo, Erick, Eleonora\n' +
-      '- DBA: Anderson'
+        '## Sobre o Projeto\n' +
+        'CarrerFlow é uma plataforma web desenvolvida para permitir que candidatos cadastrem, ' +
+        'visualizem e gerenciem suas candidaturas de emprego em um único local centralizado.\n\n' +
+        '## Versão MVP\n' +
+        'Esta é a versão MVP simplificada focada exclusivamente no CRUD de candidaturas. ' +
+        'A autenticação será implementada nas próximas sprints.\n\n' +
+        '## Equipe\n' +
+        '- Product Owner: Evellyn\n' +
+        '- Scrum Master: Italo\n' +
+        '- Desenvolvedores: Victor, Juarez, Carlos Eduardo, Erick, Eleonora\n' +
+        '- DBA: Anderson',
     )
     .setVersion('1.0.0')
     .addTag('applications', 'Endpoints para gerenciamento de candidaturas')
@@ -52,7 +56,7 @@ async function bootstrap() {
     .setContact(
       'Equipe CarrerFlow',
       'https://github.com/seu-repo/carrerflow',
-      'contato@carrerflow.com'
+      'contato@carrerflow.com',
     )
     .setLicense('MIT', 'https://opensource.org/licenses/MIT')
     .addServer('http://localhost:3000', 'Desenvolvimento Local')
