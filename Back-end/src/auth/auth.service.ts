@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -21,7 +21,7 @@ export class AuthService {
     // Check if user exists
     const existingUser = await this.userRepository.findOne({ where: { email } });
     if (existingUser) {
-      throw new UnauthorizedException('User already exists');
+      throw new ConflictException('Usuário com este email já existe');
     }
 
     // Hash password with salt
@@ -49,13 +49,13 @@ export class AuthService {
     // Find user
     const user = await this.userRepository.findOne({ where: { email } });
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Credenciais inválidas');
     }
 
     // Check password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Credenciais inválidas');
     }
 
     // Generate JWT
@@ -63,5 +63,9 @@ export class AuthService {
     const access_token = this.jwtService.sign(payload);
 
     return { access_token };
+  }
+
+  async validateUser(userId: number): Promise<User | null> {
+    return this.userRepository.findOne({ where: { id: userId } });
   }
 }

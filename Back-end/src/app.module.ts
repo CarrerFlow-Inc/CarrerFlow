@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CandidaturasModule } from './candidaturas/candidaturas.module';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -20,6 +21,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     AuthModule,
     CandidaturasModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
