@@ -1,12 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query, UseGuards } from '@nestjs/common';
 import { CandidaturasService } from './candidaturas.service';
 import { CreateCandidaturaDto } from './dto/create-candidatura.dto';
 import { UpdateCandidaturaDto } from './dto/update-candidatura.dto';
 import { FilterCandidaturaDto } from './dto/filter-candidatura.dto';
-import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Candidatura } from './entities/candidatura.entity';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('candidaturas')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('candidaturas')
 export class CandidaturasController {
   constructor(private readonly candidaturasService: CandidaturasService) {}

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CandidaturasModule } from './candidaturas/candidaturas.module';
+import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -17,6 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true, //APENAS PARA DESENVOLVIMENTO
       logging: false,
     }),
+    AuthModule,
     CandidaturasModule,
   ],
   controllers: [AppController],
