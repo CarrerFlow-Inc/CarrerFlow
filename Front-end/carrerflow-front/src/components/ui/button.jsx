@@ -21,13 +21,12 @@ export default function Button({ children, variant = "primary", className = "", 
       const y = e.clientY - rect.top - size / 2;
       const newRipple = { id: Date.now(), x, y, size, active: false };
       setRipples((prev) => [...prev, newRipple]);
-      // activate after mount to trigger transition
       requestAnimationFrame(() => {
         setRipples((prev) => prev.map(r => r.id === newRipple.id ? { ...r, active: true } : r));
       });
       setTimeout(() => {
         setRipples((prev) => prev.filter(r => r.id !== newRipple.id));
-      }, 300); // <= 300ms per spec
+      }, 300);
     }
     if (props.onClick) props.onClick(e);
   }
@@ -48,7 +47,6 @@ export default function Button({ children, variant = "primary", className = "", 
       <span className={`${loading ? 'opacity-60' : 'opacity-100'} flex items-center gap-2`}>
         {children}
       </span>
-      {/* Ripples */}
       <span className="absolute inset-0 pointer-events-none">
         {ripples.map(r => (
           <span
@@ -61,6 +59,3 @@ export default function Button({ children, variant = "primary", className = "", 
     </button>
   );
 }
-
-// Tailwind custom animation (inject via global CSS if not present)
-// @keyframes ripple { from { transform: scale(0); opacity: 0.7; } to { transform: scale(2.5); opacity: 0; } }

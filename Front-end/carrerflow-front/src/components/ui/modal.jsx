@@ -6,14 +6,11 @@ export default function Modal({ open, onClose, children, ariaLabel = "Modal" }) 
 
   React.useEffect(() => {
     if (!open) return;
-    // focus the first element when opening
     const t = setTimeout(() => {
       firstFocusRef.current?.focus();
     }, 0);
-    // close on ESC
     const onKeyDown = (e) => {
       if (e.key === 'Escape') onClose?.();
-      // basic focus trap: keep tab within dialog
       if (e.key === 'Tab' && dialogRef.current) {
         const focusable = dialogRef.current.querySelectorAll('button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])');
         const list = Array.from(focusable).filter(el => !el.disabled && el.getAttribute('aria-hidden') !== 'true');

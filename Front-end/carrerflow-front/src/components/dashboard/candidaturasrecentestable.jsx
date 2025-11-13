@@ -5,8 +5,9 @@ import Badge from "../ui/badge";
 import Button from "../ui/button";
 import { Table, THead, TBody, TRow, THeadCell, TCell } from "../ui/table";
 import { getStatusTone, getStatusLabel } from "../../utils/statusColors";
+import Pagination from "../ui/pagination";
 
-export default function CandidaturasRecentesTable({ items = [] }) {
+export default function CandidaturasRecentesTable({ items = [], meta, onPageChange }) {
   const navigate = useNavigate();
 
   return (
@@ -53,6 +54,9 @@ export default function CandidaturasRecentesTable({ items = [] }) {
           ))}
         </TBody>
       </Table>
+      {meta && (
+        <Pagination meta={meta} onChange={onPageChange} />
+      )}
     </Card>
   );
 }

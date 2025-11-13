@@ -66,9 +66,11 @@ export default function LoginForm() {
         </a>
       </div>
       
-      <Button type="submit" variant="charcoal" className="w-full">
-        Entrar
-      </Button>
+      <div className="flex justify-center">
+        <Button type="submit" variant="charcoal" className="w-full [&>span]:justify-center">
+          Entrar
+        </Button>
+      </div>
     </form>
   );
 }

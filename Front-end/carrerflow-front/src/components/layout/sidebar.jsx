@@ -15,7 +15,6 @@ const links = [
 export default function Sidebar({ mobileOpen = false, onClose, collapsed = false, onToggleCollapsed }) {
 	const { logout } = useAuth();
 
-	// Close drawer on ESC when open (primarily for mobile)
 	React.useEffect(() => {
 		if (!mobileOpen) return;
 		function onKeyDown(e) {
@@ -40,7 +39,6 @@ export default function Sidebar({ mobileOpen = false, onClose, collapsed = false
 				relative z-40 flex-none w-0 ${collapsed ? 'md:w-20' : 'md:w-64'} md:static md:h-auto
 			`}
 		>
-			{/* Drawer container: fixed overlay on mobile, static on desktop */}
 			<div
 				className={`
 					bg-[#f5f6f8] border-r border-gray-100 h-full flex flex-col
@@ -48,13 +46,10 @@ export default function Sidebar({ mobileOpen = false, onClose, collapsed = false
 					md:static md:translate-x-0 md:w-auto md:shadow-none md:rounded-none
 				`}
 			>
-				{/* Header */}
 				<div className="p-4 border-b border-gray-200 relative min-h-[72px]">
-					{/* Mobile: always show logo */}
 					<div className="flex items-center gap-3 w-full px-2 md:hidden">
 						<img src={logo} alt="Logo" className="w-16 h-16 object-contain"/>
 					</div>
-					{/* Desktop: toggle between collapsed trigger and logo */}
 					<div className="hidden md:flex items-center w-full">
 						{collapsed ? (
 							<button
@@ -73,9 +68,7 @@ export default function Sidebar({ mobileOpen = false, onClose, collapsed = false
 					</div>
 				</div>
 
-				{/* Search */}
 				<div className="px-4 pt-4">
-					{/* Mobile: always show input */}
 					<div className="md:hidden relative">
 						<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
 						<input
@@ -85,7 +78,6 @@ export default function Sidebar({ mobileOpen = false, onClose, collapsed = false
 							className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-transparent"
 						/>
 					</div>
-					{/* Desktop: respect collapsed state */}
 					<div className="hidden md:block">
 						{collapsed ? (
 							<button

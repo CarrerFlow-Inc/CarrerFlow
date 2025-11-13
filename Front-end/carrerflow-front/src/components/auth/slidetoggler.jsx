@@ -1,12 +1,4 @@
 import React from "react";
-
-// SlideToggler: shows two panels side-by-side and slides between them.
-// Props:
-// - left: ReactNode (e.g., <LoginForm />)
-// - right: ReactNode (e.g., <SignupForm />)
-// - leftLabel, rightLabel: labels for the segmented control
-// - initial: 'left' | 'right' (default: 'left')
-// - onChange?: (side) => void
 const SlideToggler = React.forwardRef(function SlideToggler(
   {
     left,
@@ -34,7 +26,6 @@ const SlideToggler = React.forwardRef(function SlideToggler(
 
   return (
     <div className="w-full">
-      {/* Segmented control */}
       <div
         role="tablist"
         aria-label="Alternar entre Login e Cadastro"
@@ -60,7 +51,6 @@ const SlideToggler = React.forwardRef(function SlideToggler(
         >
           {rightLabel}
         </button>
-        {/* Active indicator */}
         <span
           className={`absolute inset-y-1 w-1/2 rounded-md bg-gray-900 shadow-sm transition-transform duration-300 ease-out ${
             side === "left" ? "translate-x-0" : "translate-x-full"
@@ -68,8 +58,6 @@ const SlideToggler = React.forwardRef(function SlideToggler(
           aria-hidden="true"
         />
       </div>
-
-      {/* Sliding panels */}
       <div className="mt-4 overflow-hidden">
         <div
           className={`flex w-[200%] transition-transform duration-300 ease-out ${

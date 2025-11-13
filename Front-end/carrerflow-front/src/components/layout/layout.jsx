@@ -6,9 +6,27 @@ import Header from "./header";
 
 export default function Layout() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    try {
+      if (typeof window === "undefined") return true;
+      const stored = window.localStorage.getItem("sidebarCollapsed");
+      if (stored === null) return true;
+      return stored === "1";
+    } catch {
+      return true;
+    }
+  });
 
-  // Lock body scroll when mobile drawer (sidebar) is open on small screens
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("sidebarCollapsed", collapsed ? "1" : "0");
+      }
+    } catch {
+      /* persistence falhou */
+    }
+  }, [collapsed]);
+
   useEffect(() => {
     const isMobile = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(max-width: 767px)").matches;
     if (isMobile && mobileOpen) {
@@ -18,7 +36,6 @@ export default function Layout() {
         document.body.style.overflow = prev || "";
       };
     }
-    // Ensure scroll is restored when closing or when not on mobile
     document.body.style.overflow = "";
     return undefined;
   }, [mobileOpen]);
@@ -32,7 +49,7 @@ export default function Layout() {
       setToasts(prev => [...prev, { id, type, message }]);
       setTimeout(() => {
         setToasts(prev => prev.filter(t => t.id !== id));
-      }, 4000); // auto-dismiss 4s
+      }, 4000);
     }
     window.addEventListener('toast:show', onToast);
     return () => window.removeEventListener('toast:show', onToast);

@@ -1,4 +1,3 @@
-// src/pages/CandidaturaDetalhes.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, Plus, Edit, Trash2, Home, Briefcase } from 'lucide-react';
@@ -30,7 +29,6 @@ const CandidaturaDetalhes = () => {
       navigate('/candidaturas');
       return;
     }
-    // normalização dos campos para compatibilidade com layout antigo
     const normalized = {
       id: item.id,
       empresa: item.company || item.empresa || '',
@@ -47,7 +45,6 @@ const CandidaturaDetalhes = () => {
   }, [id, user, navigate]);
 
   if (!candidatura) {
-    // Skeleton loading for better feedback while resolving data
     return (
       <div className="space-y-6" aria-live="polite">
         <div className="flex items-center justify-between">
@@ -121,7 +118,6 @@ const CandidaturaDetalhes = () => {
         <ArrowLeft size={16} className="mr-1" /> Voltar
       </button>
 
-      {/* Page Header with actions */}
       <SectionHeader
         title={candidatura.vaga || 'Vaga'}
         subtitle={`${candidatura.empresa || 'Empresa'} • Aplicado em ${candidatura.data ? new Date(candidatura.data).toLocaleDateString('pt-BR') : '—'}`}
@@ -138,7 +134,6 @@ const CandidaturaDetalhes = () => {
         )}
       />
 
-      {/* Meta info */}
       <Card>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
@@ -177,7 +172,6 @@ const CandidaturaDetalhes = () => {
         onAddContato={handleAddContato}
       />
 
-      {/* FAB para adicionar anotação no mobile: rola até a seção e foca o campo */}
       <button
         type="button"
         onClick={() => {
@@ -199,7 +193,6 @@ const CandidaturaDetalhes = () => {
         <span className="sr-only">Adicionar anotação</span>
       </button>
 
-      {/* Delete confirmation modal */}
       <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} ariaLabel="Confirmar exclusão">
         <div className="max-w-lg">
           <h3 className="text-lg font-semibold mb-2">Excluir candidatura?</h3>

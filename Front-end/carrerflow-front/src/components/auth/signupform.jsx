@@ -77,9 +77,11 @@ export default function SignupForm() {
         required
       />
       
-      <Button type="submit" variant="charcoal" className="w-full mt-6">
-        Criar conta
-      </Button>
+      <div className="mt-6 flex justify-center">
+        <Button type="submit" variant="charcoal" className="w-full [&>span]:justify-center">
+          Criar conta
+        </Button>
+      </div>
       
       <div className="mt-4">
         <button type="button" className="w-full border border-gray-300 rounded-lg px-4 py-3 flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors">

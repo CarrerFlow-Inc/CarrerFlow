@@ -3,7 +3,6 @@ import Badge from "../ui/badge";
 import { getStatusTone, STATUS_LABELS } from "../../utils/statusColors";
 
 export default function KanbanBoard({ items = [], onMove, onCardClick }) {
-  // group by status
   const groups = STATUS_LABELS.reduce((acc, label) => {
     acc[label] = [];
     return acc;

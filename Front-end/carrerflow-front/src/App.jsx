@@ -1,8 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/auth/ProtectedRoute.jsx';
-
-// Route-level code splitting
 const Login = lazy(() => import('./pages/login.jsx'));
 const Signup = lazy(() => import('./pages/signup.jsx'));
 const Dashboard = lazy(() => import('./pages/dashboard.jsx'));

@@ -1,16 +1,14 @@
 import React from "react";
-import { LineChart, Line, XAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, Tooltip, ResponsiveContainer, YAxis, Legend } from "recharts";
 import Card from "../ui/card";
 
-const data = [
-  { name: "Jan", Aplicada: 20, "Em Análise": 12, "Entrevista Técnica": 5, Proposta: 2 },
-  { name: "Fev", Aplicada: 40, "Em Análise": 28, "Entrevista Técnica": 8, Proposta: 4 },
-  { name: "Mar", Aplicada: 30, "Em Análise": 15, "Entrevista Técnica": 9, Proposta: 3 },
-  { name: "Abr", Aplicada: 35, "Em Análise": 18, "Entrevista Técnica": 11, Proposta: 6 },
-  { name: "Mai", Aplicada: 18, "Em Análise": 10, "Entrevista Técnica": 3, Proposta: 1 }
-];
+export default function PerformanceChart({ timeline = [] }) {
+  // Normalize analytics timeline into chart-friendly data
+  const data = React.useMemo(() => {
+    if (!Array.isArray(timeline) || timeline.length === 0) return [];
+    return timeline.map((t) => ({ name: t.label, Total: t.total ?? 0, Ofertas: t.ofertas ?? 0 }));
+  }, [timeline]);
 
-export default function PerformanceChart() {
   return (
     <Card hoverable>
       <div className="text-sm font-medium mb-3">Performance de Candidaturas</div>
@@ -18,10 +16,11 @@ export default function PerformanceChart() {
         <ResponsiveContainer>
           <LineChart data={data}>
             <XAxis dataKey="name" />
+            <YAxis allowDecimals={false} />
             <Tooltip />
-            <Line type="monotone" dataKey="Aplicada" stroke="#111827" strokeWidth={2} dot={{ r: 3 }} />
-            <Line type="monotone" dataKey="Em Análise" stroke="#6b7280" strokeWidth={2} dot={{ r: 3 }} />
-            <Line type="monotone" dataKey="Entrevista Técnica" stroke="#9CA3AF" strokeWidth={2} dot={{ r: 3 }} />
+            <Legend />
+            <Line type="monotone" dataKey="Total" stroke="#111827" strokeWidth={2} dot={{ r: 3 }} />
+            <Line type="monotone" dataKey="Ofertas" stroke="#059669" strokeWidth={2} dot={{ r: 3 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>

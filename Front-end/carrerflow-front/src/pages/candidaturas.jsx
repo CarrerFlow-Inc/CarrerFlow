@@ -22,13 +22,12 @@ export default function Candidaturas() {
   const [meta, setMeta] = useState({ page: 1, perPage: 6, total: 0, totalPages: 1 });
   const [loading, setLoading] = useState(false);
 
-  // UI states
   const [openModal, setOpenModal] = useState(false);
   const [editing, setEditing] = useState(null);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [page, setPage] = useState(1);
-  const [viewMode, setViewMode] = useState('list'); // 'list' | 'kanban'
+  const [viewMode, setViewMode] = useState('list');
   const [sort, setSort] = useState('recent');
 
   async function fetchList(opts = {}) {
@@ -48,7 +47,6 @@ export default function Candidaturas() {
     }
   }
 
-  // debounce search
   useEffect(() => {
     const t = setTimeout(() => {
       setPage(1);
@@ -72,7 +70,6 @@ export default function Candidaturas() {
     // eslint-disable-next-line
   }, [page]);
 
-  // persist view mode
   useEffect(() => {
     const v = localStorage.getItem('cf_view_mode');
     if (v === 'list' || v === 'kanban') setViewMode(v);
@@ -103,7 +100,6 @@ export default function Candidaturas() {
     window.dispatchEvent(new Event('candidatura:deleted'));
     setDeleteItem(null);
     fetchList({ page });
-    // show undo for 5s
     if (undoData.timer) clearTimeout(undoData.timer);
     const t = setTimeout(() => setUndoData({ item: null, timer: null }), 5000);
     setUndoData({ item: deleted, timer: t });
@@ -160,7 +156,6 @@ export default function Candidaturas() {
     }
   }
 
-  // abrir criação via query param (?new=1)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     if (params.get('new')) {
@@ -173,50 +168,62 @@ export default function Candidaturas() {
 
   return (
     <div>
-      <SectionHeader
-        title="Candidaturas"
-        subtitle={`${meta.total} registros • modo ${viewMode === 'list' ? 'lista' : 'kanban'}`}
-        actions={(
-          <div className="flex items-center gap-3 flex-wrap">
-          <form onSubmit={handleSearch} className="flex items-center gap-2">
-            <div className="flex items-center border border-gray-200 rounded-md px-3 py-1">
-              <Search className="w-4 h-4 text-gray-400" />
-              <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Buscar por empresa ou vaga..." className="ml-2 outline-none text-sm" />
+      <div className="mb-6">
+        <div className="flex flex-col gap-4 xl:gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">Candidaturas</h1>
+              <p className="type-body-sm text-gray-600 mt-1">{meta.total} registros • modo {viewMode === 'list' ? 'lista' : 'kanban'}</p>
             </div>
-            <button
-              type="submit"
-              className="btn-hover touch-target inline-flex items-center justify-center w-10 h-9 border border-gray-200 rounded-md bg-white text-gray-700 hover:bg-gray-50"
-              aria-label="Buscar"
-              title="Buscar"
-            >
-              <Search className="w-4 h-4" />
-              <span className="sr-only">Buscar</span>
-            </button>
-          </form>
-
-          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="border rounded-md px-3 py-2 text-sm">
-            <option value="">Todos os status</option>
-            {STATUS_LABELS.map((label) => (
-              <option key={label} value={label}>{label}</option>
-            ))}
-          </select>
-
-          <select value={sort} onChange={e => { setSort(e.target.value); setPage(1); fetchList({ page:1, sort:e.target.value, triggerInfoToast: true }); }} className="border rounded-md px-3 py-2 text-sm">
-            <option value="recent">Mais Recentes</option>
-            <option value="oldest">Mais Antigas</option>
-            <option value="company">Empresa (A-Z)</option>
-            <option value="status">Status</option>
-          </select>
-
-          <div className="flex border rounded-md overflow-hidden">
-            <button type="button" onClick={() => setViewMode('list')} className={`px-3 py-2 text-sm ${viewMode==='list' ? 'bg-gray-900 text-white' : 'bg-white text-gray-700'}`}>Lista</button>
-            <button type="button" onClick={() => setViewMode('kanban')} className={`px-3 py-2 text-sm ${viewMode==='kanban' ? 'bg-gray-900 text-white' : 'bg-white text-gray-700'}`}>Kanban</button>
+            <div className="flex items-center gap-2">
+              <div className="flex border rounded-md overflow-hidden">
+                <button type="button" onClick={() => setViewMode('list')} aria-pressed={viewMode==='list'} className={`px-3 py-2 text-sm font-medium transition-colors ${viewMode==='list' ? 'bg-gray-900 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`}>Lista</button>
+                <button type="button" onClick={() => setViewMode('kanban')} aria-pressed={viewMode==='kanban'} className={`px-3 py-2 text-sm font-medium transition-colors ${viewMode==='kanban' ? 'bg-gray-900 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`}>Kanban</button>
+              </div>
+              <Button onClick={handleOpenCreate} variant="charcoal" className="hidden md:inline-flex" aria-label="Nova candidatura" title="Nova candidatura">Nova Candidatura</Button>
+            </div>
           </div>
-
-          <Button onClick={handleOpenCreate} variant="charcoal" className="hidden md:inline-flex">Adicionar Nova Candidatura</Button>
+          <div className="flex flex-col lg:flex-row lg:items-end gap-4">
+            <form onSubmit={handleSearch} className="flex flex-1 items-center gap-3">
+              <div className="flex flex-1 items-center gap-2 border border-gray-200 rounded-md px-3 py-2 bg-white focus-within:ring-2 focus-within:ring-indigo-500/40">
+                <Search className="w-4 h-4 text-gray-400" />
+                <input
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  placeholder="Buscar por empresa ou vaga..."
+                  className="flex-1 outline-none text-sm"
+                  aria-label="Buscar candidaturas"
+                />
+                {query && (
+                  <button type="button" onClick={() => { setQuery(''); }} className="text-xs text-gray-500 hover:text-gray-700">Limpar</button>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="btn-hover touch-target inline-flex items-center justify-center h-10 px-4 border border-gray-200 rounded-md bg-white text-gray-700 hover:bg-gray-50"
+                aria-label="Executar busca"
+                title="Buscar"
+              >
+                <Search className="w-4 h-4" />
+              </button>
+            </form>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="border rounded-md px-3 py-2 text-sm bg-white">
+                <option value="">Todos os status</option>
+                {STATUS_LABELS.map((label) => (
+                  <option key={label} value={label}>{label}</option>
+                ))}
+              </select>
+              <select value={sort} onChange={e => { setSort(e.target.value); setPage(1); fetchList({ page:1, sort:e.target.value, triggerInfoToast: true }); }} className="border rounded-md px-3 py-2 text-sm bg-white">
+                <option value="recent">Mais Recentes</option>
+                <option value="oldest">Mais Antigas</option>
+                <option value="company">Empresa (A-Z)</option>
+                <option value="status">Status</option>
+              </select>
+            </div>
           </div>
-        )}
-      />
+        </div>
+      </div>
 
       <div className="flex items-center justify-between mb-2" />
       <Card>
@@ -275,7 +282,7 @@ export default function Candidaturas() {
                 onClick={() => { setStatusFilter(''); setQuery(''); setSort('recent'); setPage(1); fetchList({ page:1, q:'', sort:'recent' }); }}
                 className="px-3 py-2 text-sm border rounded-md bg-white hover:bg-gray-50"
               >Limpar filtros</button>
-              <Button onClick={handleOpenCreate} variant="primary">Adicionar candidatura</Button>
+              <Button onClick={handleOpenCreate} variant="charcoal" aria-label="Nova candidatura" title="Nova candidatura">Nova Candidatura</Button>
             </div>
           </div>
         ) : viewMode === 'kanban' ? (
@@ -342,7 +349,6 @@ export default function Candidaturas() {
         </div>
       </Modal>
 
-      {/* Delete confirmation */}
       <Modal open={!!deleteItem} onClose={cancelDelete} ariaLabel="Confirmar exclusão">
         <div className="max-w-lg">
           <h3 className="text-lg font-semibold mb-2">Tem certeza que deseja excluir esta candidatura?</h3>
@@ -359,16 +365,12 @@ export default function Candidaturas() {
           </div>
         </div>
       </Modal>
-
-      {/* Undo Toast */}
       {undoData.item && (
         <div className="fixed left-1/2 -translate-x-1/2 bottom-6 z-50 bg-gray-900 text-white rounded-full shadow-lg px-4 py-2 flex items-center gap-3">
           <span className="type-body-sm">Candidatura excluída</span>
           <button onClick={handleUndo} className="underline">Desfazer</button>
         </div>
       )}
-
-      {/* Floating Action Button (mobile -> xs: circular icon; sm+: pill with label) */}
       <button
         type="button"
         onClick={handleOpenCreate}

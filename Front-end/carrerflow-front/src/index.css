@@ -1,6 +1,6 @@
-﻿@import "tailwindcss";
-/* Montserrat font import (weights 400-700 for body/headings) */
+﻿/* Montserrat font import (weights 400-700 for body/headings) */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
 
 body {
   background-color: #f9fafb;
