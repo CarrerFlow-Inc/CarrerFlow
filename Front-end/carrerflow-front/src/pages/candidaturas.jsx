@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../components/ui/card";
 import Button from "../components/ui/button";
@@ -30,15 +30,27 @@ export default function Candidaturas() {
   const [viewMode, setViewMode] = useState('list');
   const [sort, setSort] = useState('recent');
 
+  // Tracks whether we should show an informational toast after data reload
+  // null = none, 'status' = status column move, 'edit' = form edit
+  const [pendingInfoToast, setPendingInfoToast] = useState(null);
+
   async function fetchList(opts = {}) {
     if (!user) return;
     setLoading(true);
     try {
-      const res = api.getCandidaturas(user.id, { page: opts.page || page, perPage: opts.perPage || meta.perPage, status: statusFilter || null, q: (opts.q ?? query) || null, sort: opts.sort || sort });
+      const effectivePage = viewMode === 'kanban' ? 1 : (opts.page || page);
+      const effectivePerPage = viewMode === 'kanban' ? 1000 : (opts.perPage || meta.perPage);
+      const res = api.getCandidaturas(user.id, { page: effectivePage, perPage: effectivePerPage, status: statusFilter || null, q: (opts.q ?? query) || null, sort: opts.sort || sort });
       setItems(res.items);
       setMeta(res.meta);
-      if (opts.triggerInfoToast) {
-        window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'info', message: 'Dados atualizados' } }));
+      if (pendingInfoToast) {
+        const msg = pendingInfoToast === 'status'
+          ? 'Status atualizado'
+          : pendingInfoToast === 'edit'
+            ? 'Candidatura atualizada'
+            : 'Dados atualizados';
+        window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'info', message: msg } }));
+        setPendingInfoToast(null);
       }
     } catch {
       window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'error', message: 'Falha ao carregar. Verifique sua conexão e tente novamente.' } }));
@@ -56,12 +68,10 @@ export default function Candidaturas() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
-  const didInitStatusRef = useRef(false);
+  // Refetch on status filter change (no info toast)
   useEffect(() => {
     setPage(1);
-    const shouldToast = didInitStatusRef.current; // only after first run
-    fetchList({ page: 1, triggerInfoToast: shouldToast });
-    didInitStatusRef.current = true;
+    fetchList({ page: 1 });
     // eslint-disable-next-line
   }, [statusFilter]);
 
@@ -69,6 +79,13 @@ export default function Candidaturas() {
     fetchList({ page });
     // eslint-disable-next-line
   }, [page]);
+
+  // Refetch switching view mode; reset to first page
+  useEffect(() => {
+    setPage(1);
+    fetchList({ page: 1 });
+    // eslint-disable-next-line
+  }, [viewMode]);
 
   useEffect(() => {
     const v = localStorage.getItem('cf_view_mode');
@@ -124,6 +141,7 @@ export default function Candidaturas() {
       if (editing && editing.id) {
         api.updateCandidatura(editing.id, payload);
         window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'success', message: 'Candidatura atualizada com sucesso' } }));
+        setPendingInfoToast('edit');
       } else {
         api.createCandidatura(user.id, payload);
         window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'success', message: 'Candidatura salva com sucesso' } }));
@@ -150,6 +168,7 @@ export default function Candidaturas() {
     try {
       api.updateCandidatura(id, { status: newStatus });
       window.dispatchEvent(new Event('candidatura:updated'));
+      setPendingInfoToast('status');
       fetchList({ page });
     } catch {
       window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'error', message: 'Não foi possível mover. Tente novamente.' } }));
@@ -180,7 +199,9 @@ export default function Candidaturas() {
                 <button type="button" onClick={() => setViewMode('list')} aria-pressed={viewMode==='list'} className={`px-3 py-2 text-sm font-medium transition-colors ${viewMode==='list' ? 'bg-gray-900 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`}>Lista</button>
                 <button type="button" onClick={() => setViewMode('kanban')} aria-pressed={viewMode==='kanban'} className={`px-3 py-2 text-sm font-medium transition-colors ${viewMode==='kanban' ? 'bg-gray-900 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`}>Kanban</button>
               </div>
-              <Button onClick={handleOpenCreate} variant="charcoal" className="hidden md:inline-flex" aria-label="Nova candidatura" title="Nova candidatura">Nova Candidatura</Button>
+              <div className="hidden md:block">
+                <Button onClick={handleOpenCreate} variant="charcoal" aria-label="Nova candidatura" title="Nova candidatura">Nova Candidatura</Button>
+              </div>
             </div>
           </div>
           <div className="flex flex-col lg:flex-row lg:items-end gap-4">
@@ -207,14 +228,14 @@ export default function Candidaturas() {
                 <Search className="w-4 h-4" />
               </button>
             </form>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="border rounded-md px-3 py-2 text-sm bg-white">
+            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+              <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="border rounded-md px-3 py-2 text-sm bg-white w-full sm:w-auto">
                 <option value="">Todos os status</option>
                 {STATUS_LABELS.map((label) => (
                   <option key={label} value={label}>{label}</option>
                 ))}
               </select>
-              <select value={sort} onChange={e => { setSort(e.target.value); setPage(1); fetchList({ page:1, sort:e.target.value, triggerInfoToast: true }); }} className="border rounded-md px-3 py-2 text-sm bg-white">
+              <select value={sort} onChange={e => { setSort(e.target.value); setPage(1); fetchList({ page:1, sort:e.target.value, triggerInfoToast: true }); }} className="border rounded-md px-3 py-2 text-sm bg-white w-full sm:w-auto">
                 <option value="recent">Mais Recentes</option>
                 <option value="oldest">Mais Antigas</option>
                 <option value="company">Empresa (A-Z)</option>
@@ -277,12 +298,16 @@ export default function Candidaturas() {
             <h3 className="text-lg font-semibold text-gray-900">Nada encontrado</h3>
             <p className="type-body-sm text-gray-600 max-w-sm">Tente remover filtros ou ajustar sua busca. Se voc9 ainda n9 adicionou nenhuma candidatura, comece agora.</p>
             <div className="flex flex-wrap items-center justify-center gap-2">
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                aria-label="Limpar filtros"
                 onClick={() => { setStatusFilter(''); setQuery(''); setSort('recent'); setPage(1); fetchList({ page:1, q:'', sort:'recent' }); }}
-                className="px-3 py-2 text-sm border rounded-md bg-white hover:bg-gray-50"
-              >Limpar filtros</button>
-              <Button onClick={handleOpenCreate} variant="charcoal" aria-label="Nova candidatura" title="Nova candidatura">Nova Candidatura</Button>
+                className="text-sm"
+              >Limpar filtros</Button>
+              <div className="hidden md:block">
+                <Button onClick={handleOpenCreate} variant="charcoal" aria-label="Nova candidatura" title="Nova candidatura">Nova Candidatura</Button>
+              </div>
             </div>
           </div>
         ) : viewMode === 'kanban' ? (
@@ -339,7 +364,9 @@ export default function Candidaturas() {
           </div>
         )}
 
-        <Pagination meta={meta} onChange={(p) => setPage(p)} />
+        {viewMode !== 'kanban' && (
+          <Pagination meta={meta} onChange={(p) => setPage(p)} />
+        )}
       </Card>
 
       <Modal open={openModal} onClose={() => { setOpenModal(false); setEditing(null); }} ariaLabel={editing ? "Editar candidatura" : "Nova candidatura"}>
@@ -360,8 +387,8 @@ export default function Candidaturas() {
             </p>
           )}
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={cancelDelete} className="px-4 py-2 border rounded-md">Cancelar</button>
-            <button type="button" onClick={confirmDelete} className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white">Excluir</button>
+            <Button type="button" variant="outline" onClick={cancelDelete} aria-label="Cancelar exclusão">Cancelar</Button>
+            <Button type="button" variant="danger" onClick={confirmDelete} aria-label="Confirmar exclusão">Excluir</Button>
           </div>
         </div>
       </Modal>

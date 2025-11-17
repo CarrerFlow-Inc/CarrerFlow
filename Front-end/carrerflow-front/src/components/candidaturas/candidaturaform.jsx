@@ -98,8 +98,22 @@ export default function CandidaturaForm({ initial = {}, onCancel, onSave }) {
       </label>
 
       <div className="flex gap-2 justify-end">
-        <button type="button" onClick={() => { if (!isDirty() || window.confirm('Descartar alterações?')) onCancel && onCancel(); }} className="px-4 py-2 border rounded-md">Cancelar</button>
-        <Button type="submit" variant="charcoal">Salvar</Button>
+        <Button
+          type="button"
+          variant="outline"
+          aria-label="Cancelar edição"
+          onClick={() => { if (!isDirty() || window.confirm('Descartar alterações?')) onCancel && onCancel(); }}
+        >
+          Cancelar
+        </Button>
+        <Button
+          type="submit"
+          variant="charcoal"
+          aria-label="Salvar candidatura"
+          disabled={!title.trim() || !company.trim()}
+        >
+          Salvar
+        </Button>
       </div>
     </form>
   );

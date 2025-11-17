@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Plus, Trash2, Pencil } from 'lucide-react';
 import { formatRelative } from '../../utils/time';
+import Button from '../ui/button';
 
 const AnotacoesSection = ({ anotacoes = [], onAddAnotacao, onDeleteAnotacao, onEditAnotacao, containerId = "anotacoes-section", textAreaId = "nova-anotacao" }) => {
   const [novaAnotacao, setNovaAnotacao] = useState('');
@@ -30,12 +31,17 @@ const AnotacoesSection = ({ anotacoes = [], onAddAnotacao, onDeleteAnotacao, onE
           className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
           rows="3"
         />
-        <button
-          type="submit"
-          className="mt-2 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 text-sm font-medium"
-        >
-          Salvar Anotação
-        </button>
+        <div className="mt-2">
+          <Button
+            type="submit"
+            variant="charcoal"
+            aria-label="Salvar anotação"
+            disabled={!novaAnotacao.trim()}
+            className="text-sm"
+          >
+            Salvar Anotação
+          </Button>
+        </div>
       </form>
 
       {anotacoes.length === 0 && (

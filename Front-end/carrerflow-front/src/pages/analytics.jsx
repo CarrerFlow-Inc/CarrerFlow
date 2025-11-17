@@ -35,9 +35,9 @@ export default function Analytics() {
         title="Analytics"
         subtitle="Métricas e insights aprofundados sobre suas candidaturas"
         actions={(
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
             <select
-              className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-full sm:w-auto"
               value={range}
               onChange={(e) => setRange(e.target.value)}
               aria-label="Intervalo"
@@ -47,7 +47,7 @@ export default function Analytics() {
               <option value="12m">Últimos 12 meses</option>
             </select>
             <select
-              className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-full sm:w-auto"
               value={companyFilter}
               onChange={(e) => setCompanyFilter(e.target.value)}
               aria-label="Filtrar por empresa"
@@ -56,7 +56,7 @@ export default function Analytics() {
               {data.filters.availableCompanies.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
             <select
-              className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-full sm:w-auto"
               value={locationFilter}
               onChange={(e) => setLocationFilter(e.target.value)}
               aria-label="Filtrar por localidade"

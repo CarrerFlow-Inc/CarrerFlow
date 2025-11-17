@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Home, Briefcase, PieChart, User, Settings, ChevronLeft, ChevronRight, LogOut, Menu, Search } from "lucide-react";
-import logo from "../../assets/logo.png";
+import logoFull from "../../assets/carrerflow.svg"; // unified SVG logo for all states
 import { useAuth } from "../../hooks/useAuth";
 
 const links = [
@@ -47,8 +47,8 @@ export default function Sidebar({ mobileOpen = false, onClose, collapsed = false
 				`}
 			>
 				<div className="p-4 border-b border-gray-200 relative min-h-[72px]">
-					<div className="flex items-center gap-3 w-full px-2 md:hidden">
-						<img src={logo} alt="Logo" className="w-16 h-16 object-contain"/>
+					<div className="flex items-center justify-center w-full md:hidden">
+						<img src={logoFull} alt="CareerFlow" className="h-14 w-auto max-w-[180px] object-contain" />
 					</div>
 					<div className="hidden md:flex items-center w-full">
 						{collapsed ? (
@@ -61,8 +61,8 @@ export default function Sidebar({ mobileOpen = false, onClose, collapsed = false
 								<Menu className="w-6 h-6 text-gray-700" />
 							</button>
 						) : (
-							<div className="flex items-center gap-3 w-full px-2">
-								<img src={logo} alt="Logo" className="w-16 h-16 object-contain"/>
+							<div className="flex items-center justify-center w-full">
+								<img src={logoFull} alt="CareerFlow" className="h-14 md:h-16 w-auto max-w-[200px] object-contain" />
 							</div>
 						)}
 					</div>

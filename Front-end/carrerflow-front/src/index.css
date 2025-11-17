@@ -33,14 +33,13 @@ body {
 .type-body-sm { font-size: 0.8125rem; line-height: var(--leading-normal); }
 .type-caption { font-size: 0.75rem; line-height: var(--leading-relaxed); color:#6b7280; }
 
-/* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
-  body { background-color:#111827; color:#f3f4f6; }
-  .type-caption { color:#9ca3af; }
-  .type-subtle { color:#d1d5db; }
-  .type-body, .type-body-sm { color:#e5e7eb; }
-  h1,h2,h3,h4 { color:#f9fafb; }
-}
+/* Dark mode adjustments (opt-in via data-theme="dark") */
+:root[data-theme='dark'] { color-scheme: dark; }
+:root[data-theme='dark'] body { background-color:#111827; color:#f3f4f6; }
+:root[data-theme='dark'] .type-caption { color:#9ca3af; }
+:root[data-theme='dark'] .type-subtle { color:#d1d5db; }
+:root[data-theme='dark'] .type-body, :root[data-theme='dark'] .type-body-sm { color:#e5e7eb; }
+:root[data-theme='dark'] h1, :root[data-theme='dark'] h2, :root[data-theme='dark'] h3, :root[data-theme='dark'] h4 { color:#f9fafb; }
 
 /* Heading reset */
 h1,h2,h3,h4,h5,h6 { font-family: var(--font-sans); font-weight:600; letter-spacing: var(--tracking-normal); }

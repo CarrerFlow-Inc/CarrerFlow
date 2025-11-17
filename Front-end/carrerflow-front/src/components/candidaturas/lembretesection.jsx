@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Bell, Calendar, AlertTriangle } from 'lucide-react';
+import Button from '../ui/button';
 
 const LembreteSection = ({ lembrete, onSetLembrete, containerId = "lembrete-section" }) => {
   const [dataLembrete, setDataLembrete] = useState(lembrete ? lembrete.split('T')[0] : '');
@@ -42,7 +43,15 @@ const LembreteSection = ({ lembrete, onSetLembrete, containerId = "lembrete-sect
           min={new Date().toISOString().split('T')[0]}
           className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
-        <button onClick={handleSave} className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 text-sm font-medium">Definir</button>
+        <Button
+          onClick={handleSave}
+          variant="charcoal"
+          aria-label="Definir lembrete"
+          disabled={!dataLembrete}
+          className="text-sm"
+        >
+          Definir
+        </Button>
       </div>
     </div>
   );

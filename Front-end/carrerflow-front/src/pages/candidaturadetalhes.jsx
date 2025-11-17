@@ -198,19 +198,20 @@ const CandidaturaDetalhes = () => {
           <h3 className="text-lg font-semibold mb-2">Excluir candidatura?</h3>
           <p className="type-body-sm text-gray-600 mb-4">Essa ação não poderá ser desfeita. Confirme para remover <strong>{candidatura.vaga}</strong>{candidatura.empresa ? ` • ${candidatura.empresa}` : ''}.</p>
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={() => setConfirmDelete(false)} className="px-4 py-2 border rounded-md">Cancelar</button>
-            <button
+            <Button type="button" variant="outline" onClick={() => setConfirmDelete(false)} aria-label="Cancelar exclusão">Cancelar</Button>
+            <Button
               type="button"
+              variant="danger"
               onClick={() => {
                 api.deleteCandidatura(candidatura.id);
                 window.dispatchEvent(new Event('candidatura:deleted'));
                 window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'success', message: 'Candidatura excluída com sucesso' } }));
                 navigate('/candidaturas');
               }}
-              className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white"
+              aria-label="Confirmar exclusão"
             >
               Confirmar
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>

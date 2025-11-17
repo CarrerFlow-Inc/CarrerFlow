@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { User, Mail, Phone, ExternalLink } from 'lucide-react';
 import FormField from '../ui/formfield';
+import Button from '../ui/button';
 
 const ContatosSection = ({ contatos = [], onAddContato, containerId = "contatos-section" }) => {
   const [novoContato, setNovoContato] = useState({
@@ -68,12 +69,15 @@ const ContatosSection = ({ contatos = [], onAddContato, containerId = "contatos-
           </div>
         </FormField>
         <div className="md:col-span-3 flex justify-end">
-          <button
+          <Button
             type="submit"
-            className="px-3 py-1.5 bg-gray-800 text-white text-sm rounded-md hover:bg-black"
+            variant="charcoal"
+            aria-label="Adicionar contato"
+            disabled={!novoContato.nome.trim()}
+            className="text-sm"
           >
             Adicionar Contato
-          </button>
+          </Button>
         </div>
       </form>
 

@@ -26,7 +26,7 @@ export default function Pagination({ meta = {}, onChange }) {
       <div className="inline-flex items-center gap-2 w-full justify-between sm:justify-end min-w-max">
       <button
         onClick={() => goTo(page - 1)}
-        className="inline-flex items-center gap-1 px-3 py-2 rounded-md border border-gray-200 bg-white text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed btn-hover touch-target"
+        className={`inline-flex items-center gap-1 px-3 py-2 rounded-md text-sm btn-hover touch-target border disabled:opacity-50 disabled:cursor-not-allowed ${page === 1 ? 'border-gray-200 bg-white text-gray-400' : 'border-gray-900 bg-gray-900 text-white hover:bg-gray-800'}`}
         disabled={page === 1}
         aria-label="Anterior"
       >
@@ -51,7 +51,7 @@ export default function Pagination({ meta = {}, onChange }) {
           aria-current={p === page ? "page" : undefined}
           className={`px-3 py-2 rounded-md text-sm btn-hover touch-target ${
             p === page
-              ? "bg-indigo-600 text-white border border-indigo-600"
+              ? "border border-gray-900 bg-gray-900 text-white hover:bg-gray-800"
               : "border border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
           }`}
         >
@@ -71,7 +71,7 @@ export default function Pagination({ meta = {}, onChange }) {
 
       <button
         onClick={() => goTo(page + 1)}
-        className="inline-flex items-center gap-1 px-3 py-2 rounded-md border border-gray-200 bg-white text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed btn-hover touch-target"
+        className={`inline-flex items-center gap-1 px-3 py-2 rounded-md text-sm btn-hover touch-target border disabled:opacity-50 disabled:cursor-not-allowed ${page === totalPages ? 'border-gray-200 bg-white text-gray-400' : 'border-gray-900 bg-gray-900 text-white hover:bg-gray-800'}`}
         disabled={page === totalPages}
         aria-label="Próxima"
       >

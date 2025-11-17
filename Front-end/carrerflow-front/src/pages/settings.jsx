@@ -111,8 +111,8 @@ export default function Settings() {
               </label>
             </div>
           </Card>
-          <div className="md:col-span-2 flex items-center justify-end">
-            <Button variant="primary" type="submit" loading={saving}>Salvar configurações</Button>
+          <div className="md:col-span-2 flex items-center justify-end flex-wrap">
+            <Button variant="charcoal" className="w-full sm:w-auto" type="submit" loading={saving}>Salvar configurações</Button>
           </div>
         </form>
       )}

@@ -190,7 +190,9 @@ export const api = {
       ...candidatura,
       id: Date.now().toString(),
       userId,
-      createdAt: new Date().toISOString(),
+      createdAt: candidatura.createdAt
+        ? candidatura.createdAt
+        : new Date().toISOString(),
     };
     db.candidaturas.push(newItem);
     _writeDb(db);

@@ -102,9 +102,9 @@ export default function Profile() {
                 required
               />
             </FormField>
-            <div className="md:col-span-2 flex items-center justify-end gap-2 mt-2">
-              <Button variant="outline" type="button" onClick={() => setForm({ name: user?.name || '', email: user?.email || '' })}>Cancelar</Button>
-              <Button variant="primary" type="submit" loading={saving}>Salvar alterações</Button>
+            <div className="md:col-span-2 flex items-center justify-end gap-2 mt-2 flex-wrap">
+              <Button variant="outline" className="w-full sm:w-auto" type="button" onClick={() => setForm({ name: user?.name || '', email: user?.email || '' })}>Cancelar</Button>
+              <Button variant="charcoal" className="w-full sm:w-auto" type="submit" loading={saving}>Salvar alterações</Button>
             </div>
           </div>
         </form>
@@ -121,8 +121,8 @@ export default function Profile() {
           <FormField label="Confirmar nova senha">
             <Input type="password" value={pw.confirm} onChange={(e) => setPw(p => ({ ...p, confirm: e.target.value }))} placeholder="Repita a nova senha" required />
           </FormField>
-          <div className="md:col-span-3 flex items-center justify-end gap-2">
-            <Button variant="primary" type="submit" loading={pwSaving}>Alterar senha</Button>
+          <div className="md:col-span-3 flex items-center justify-end gap-2 flex-wrap">
+            <Button variant="charcoal" className="w-full sm:w-auto" type="submit" loading={pwSaving}>Alterar senha</Button>
           </div>
         </form>
       </Card>

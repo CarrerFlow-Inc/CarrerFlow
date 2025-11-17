@@ -37,14 +37,14 @@ export default function Button({ children, variant = "primary", className = "", 
       onClick={handleClick}
       ref={btnRef}
       disabled={disabled || loading}
-      className={`relative overflow-hidden px-6 py-3 rounded-lg font-medium text-base md:text-sm min-h-11 transition-all duration-200 will-change-transform hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 disabled:opacity-50 disabled:cursor-not-allowed ${variants[variant]} ${className}`}
+      className={`relative inline-flex items-center justify-center text-center overflow-hidden px-6 py-3 rounded-lg font-medium text-base md:text-sm min-h-11 transition-all duration-200 will-change-transform hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 disabled:opacity-50 disabled:cursor-not-allowed ${variants[variant]} ${className}`}
     >
       {loading && (
         <span className="absolute left-3 top-1/2 -translate-y-1/2">
           <Spinner size={18} />
         </span>
       )}
-      <span className={`${loading ? 'opacity-60' : 'opacity-100'} flex items-center gap-2`}>
+      <span className={`${loading ? 'opacity-60' : 'opacity-100'} flex items-center justify-center gap-2 w-full`}>
         {children}
       </span>
       <span className="absolute inset-0 pointer-events-none">
