@@ -48,7 +48,6 @@ erDiagram
     applications ||--o{ contacts : "possui"
     applications ||--o{ reminders : "possui"
 
-
 ---
 
 # 📌 **2. Arquitetura Geral – Diagrama Mermaid**
