@@ -143,7 +143,7 @@ export default function Dashboard() {
         <div className="lg:col-span-2">
           <PerformanceChart timeline={analytics.timeline} />
         </div>
-        <div>
+        <div className="h-full">
           <ConversionDonutChart companies={analytics.companies} />
         </div>
       </div>

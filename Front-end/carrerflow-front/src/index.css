@@ -96,3 +96,16 @@ a:focus-visible {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }
+
+/* Post-it note enter animation */
+@keyframes noteEnter {
+  0% { opacity: 0; transform: translateY(6px) scale(.96) rotate(1deg); box-shadow: 0 0 0 rgba(0,0,0,0); }
+  55% { opacity: .9; transform: translateY(-2px) scale(1.01) rotate(-0.4deg); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); box-shadow: 0 3px 6px rgba(0,0,0,0.06); }
+}
+@keyframes notePulseOnce {
+  0% { box-shadow: 0 3px 6px rgba(0,0,0,0.06); }
+  50% { box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
+  100% { box-shadow: 0 3px 6px rgba(0,0,0,0.06); }
+}
+.animate-note-enter { animation: noteEnter 420ms cubic-bezier(.25,.85,.35,1.0), notePulseOnce 900ms 420ms ease-out forwards; }

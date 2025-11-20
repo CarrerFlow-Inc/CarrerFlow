@@ -67,9 +67,26 @@ export default function LoginForm() {
       </div>
       
       <div className="flex justify-center">
-        <Button type="submit" variant="charcoal" className="w-full [&>span]:justify-center">
+        <Button type="submit" variant="charcoal" className="w-full [&>span]:justify-center" aria-label="Entrar">
           Entrar
         </Button>
+      </div>
+
+      {/* Social login directly below primary submit for tighter grouping */}
+      <div className="space-y-2">
+        <div className="flex items-center" aria-hidden="true">
+          <div className="w-full border-t border-gray-200" />
+          <span className="px-2 type-caption text-gray-500">ou</span>
+          <div className="w-full border-t border-gray-200" />
+        </div>
+        <button
+          type="button"
+          aria-label="Entrar com Google"
+          className="w-full border border-gray-300 rounded-lg px-4 py-3 flex items-center justify-center gap-3 hover:bg-gray-50 active:scale-[.985] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 btn-hover"
+        >
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
+          <span className="font-medium text-gray-700">Entrar com Google</span>
+        </button>
       </div>
     </form>
   );
