@@ -1,0 +1,98 @@
+﻿/* Montserrat font import (weights 400-700 for body/headings) */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+body {
+  background-color: #f9fafb;
+  color: #111827;
+  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  font-feature-settings: "liga" 1, "kern" 1;
+}
+
+/* Typography scale utilities */
+:root {
+  --font-sans: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --leading-tight: 1.15;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+  --tracking-tight: -0.5px;
+  --tracking-normal: 0;
+  --tracking-wide: 0.5px;
+}
+
+.type-display { font-size: clamp(2.25rem, 6vw, 3rem); font-weight:700; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); }
+.type-h1 { font-size: clamp(1.875rem, 5vw, 2.25rem); font-weight:700; line-height: var(--leading-tight); }
+.type-h2 { font-size: clamp(1.5rem, 4vw, 1.875rem); font-weight:600; line-height: var(--leading-tight); }
+.type-h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); font-weight:600; line-height: var(--leading-tight); }
+.type-h4 { font-size: 1.125rem; font-weight:600; line-height: var(--leading-tight); }
+.type-subtle { font-size: 0.8125rem; font-weight:500; line-height: var(--leading-normal); letter-spacing: var(--tracking-wide); text-transform: uppercase; }
+.type-body { font-size: 0.9375rem; line-height: var(--leading-normal); }
+.type-body-sm { font-size: 0.8125rem; line-height: var(--leading-normal); }
+.type-caption { font-size: 0.75rem; line-height: var(--leading-relaxed); color:#6b7280; }
+
+/* Dark mode adjustments (opt-in via data-theme="dark") */
+:root[data-theme='dark'] { color-scheme: dark; }
+:root[data-theme='dark'] body { background-color:#111827; color:#f3f4f6; }
+:root[data-theme='dark'] .type-caption { color:#9ca3af; }
+:root[data-theme='dark'] .type-subtle { color:#d1d5db; }
+:root[data-theme='dark'] .type-body, :root[data-theme='dark'] .type-body-sm { color:#e5e7eb; }
+:root[data-theme='dark'] h1, :root[data-theme='dark'] h2, :root[data-theme='dark'] h3, :root[data-theme='dark'] h4 { color:#f9fafb; }
+
+/* Heading reset */
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-sans); font-weight:600; letter-spacing: var(--tracking-normal); }
+h1 { font-size: clamp(1.875rem, 5vw, 2.25rem); font-weight:700; line-height: var(--leading-tight); }
+h2 { font-size: clamp(1.5rem, 4vw, 1.875rem); font-weight:600; line-height: var(--leading-tight); }
+h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); font-weight:600; line-height: var(--leading-tight); }
+h4 { font-size: 1.125rem; font-weight:600; line-height: var(--leading-tight); }
+
+/* Improve readability of long-form paragraphs */
+p { font-family: var(--font-sans); font-size: 0.95rem; line-height: var(--leading-normal); }
+
+/* Sharper contrast for emphasized text */
+strong { font-weight:600; }
+em { font-style:italic; }
+
+/* Remove tap highlight for a smoother mobile experience */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Always show a clear focus ring for keyboard users */
+:focus-visible {
+  outline: 2px solid rgba(99,102,241,0.65); /* indigo-500/65 */
+  outline-offset: 2px;
+}
+
+/* Improve default link focus for accessibility */
+a:focus-visible {
+  border-radius: 6px;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.25);
+}
+
+/* Touch target helper for icon-only and small controls */
+.touch-target { min-width: 44px; min-height: 44px; }
+
+/* Subtle dynamic hover for raw <button> elements that aren't using the shared Button component */
+.btn-hover {
+  transition: transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+  will-change: transform;
+}
+.btn-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+}
+.btn-hover:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+.btn-hover:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(17,24,39,0.2);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }

@@ -10,7 +10,7 @@ Aqui seguem as diretrizes e boas práticas para colaboração dentro do **monore
 O repositório é organizado em pastas principais para manter a separação entre as áreas:
 
 * `frontend/` → Código do cliente (UI/UX).
-* `backend/` → Backend principal (Spring Boot).
+* `backend/` → Backend principal (NestJS).
 * `microservices/` → Microserviços independentes.
 * `docs/` → Documentação geral e técnica.
 * `scripts/` → Scripts auxiliares.
