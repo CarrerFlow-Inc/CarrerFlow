@@ -24,6 +24,17 @@ const STATUS_DEFINITIONS = [
     aliases: ["entrevista tecnica", "tecnica"],
   },
   {
+    key: "entrevista-agendada",
+    label: "Entrevista Agendada",
+    hex: "#00BCD4",
+    aliases: [
+      "entrevista agendada",
+      "agendada",
+      "entrevista marcada",
+      "marcada",
+    ],
+  },
+  {
     key: "entrevista-com-gestor",
     label: "Entrevista com Gestor",
     hex: "#8BC34A",
