@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/auth/ProtectedRoute.jsx';
 const Login = lazy(() => import('./pages/login.jsx'));
 const Signup = lazy(() => import('./pages/signup.jsx'));
+const Forgot = lazy(() => import('./pages/forgot.jsx'));
 const Dashboard = lazy(() => import('./pages/dashboard.jsx'));
 const Candidaturas = lazy(() => import('./pages/candidaturas.jsx'));
 const Analytics = lazy(() => import('./pages/analytics.jsx'));
@@ -39,6 +40,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot" element={<Forgot />} />
 
         <Route
           path="/"
