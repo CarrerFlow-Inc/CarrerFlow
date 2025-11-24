@@ -35,14 +35,16 @@ export default function CandidaturaForm({ initial = {}, onCancel, onSave }) {
         status: initial.status || STATUS_OPTIONS[0],
       });
     } else {
+      // Pré-preenche data com hoje para cumprir requisito de obrigatoriedade
+      const today = new Date().toISOString().slice(0,10);
       setTitle("");
       setCompany("");
       setLocation("");
-      setDate("");
+      setDate(today);
       setSource("");
       setLink("");
       setStatus(STATUS_OPTIONS[0]);
-      setOriginal({ title: "", company: "", location: "", date: "", source: "", link: "", status: STATUS_OPTIONS[0] });
+      setOriginal({ title: "", company: "", location: "", date: today, source: "", link: "", status: STATUS_OPTIONS[0] });
     }
   }, [initial]);
 
@@ -72,9 +74,13 @@ export default function CandidaturaForm({ initial = {}, onCancel, onSave }) {
       setErrors((prev) => ({ ...prev, link: linkError }));
       return;
     }
+    if (!date || !source) {
+      window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'error', message: 'Preencha Data e Fonte' } }));
+      return;
+    }
     const payload = { title, company, location, status };
-    if (date) payload.createdAt = new Date(date).toISOString();
-    if (source) payload.source = source;
+    payload.createdAt = new Date(date).toISOString();
+    payload.source = source;
     if (link) payload.link = link;
     onSave && onSave(payload);
   }
@@ -85,10 +91,10 @@ export default function CandidaturaForm({ initial = {}, onCancel, onSave }) {
       <Input label="Empresa *" value={company} onChange={e => setCompany(e.target.value)} required />
       <Input label="Local" value={location} onChange={e => setLocation(e.target.value)} />
       <label className="block text-sm">
-        <span className="block type-subtle mb-1">Data da Candidatura</span>
-        <input type="date" value={date} onChange={e => setDate(e.target.value)} className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm" />
+        <span className="block type-subtle mb-1">Data da Candidatura *</span>
+        <input required type="date" value={date} onChange={e => setDate(e.target.value)} className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm" />
       </label>
-      <Input label="Fonte" value={source} onChange={e => setSource(e.target.value)} placeholder="LinkedIn, Indeed, Site da Empresa" />
+      <Input label="Fonte *" value={source} required onChange={e => setSource(e.target.value)} placeholder="LinkedIn, Indeed, Site da Empresa" />
       <Input label="Link da Vaga" value={link} onChange={e => setLink(e.target.value)} type="url" placeholder="https://..." error={errors.link} />
       <label className="block text-sm">
   <span className="block type-subtle mb-1">Status</span>
@@ -110,7 +116,7 @@ export default function CandidaturaForm({ initial = {}, onCancel, onSave }) {
           type="submit"
           variant="charcoal"
           aria-label="Salvar candidatura"
-          disabled={!title.trim() || !company.trim()}
+          disabled={!title.trim() || !company.trim() || !date || !source.trim()}
         >
           Salvar
         </Button>
