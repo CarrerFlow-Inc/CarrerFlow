@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Suspense } from "react";
 import StatsCard from "../components/dashboard/statscard";
-import PerformanceChart from "../components/dashboard/performancechart";
-import ConversionDonutChart from "../components/dashboard/conversionchart";
+// Lazy charts: heavy Recharts code split
+const PerformanceChart = React.lazy(() => import("../components/dashboard/performancechart"));
+const ConversionDonutChart = React.lazy(() => import("../components/dashboard/conversionchart"));
 import CandidaturasRecentesTable from "../components/dashboard/candidaturasrecentestable";
 import StatusSummary from "../components/dashboard/statussummary";
 import Button from "../components/ui/button";
@@ -141,10 +142,14 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <PerformanceChart timeline={analytics.timeline} />
+          <Suspense fallback={<div className="h-[220px] flex items-center justify-center text-xs text-gray-500 bg-white border rounded-xl">Carregando gráfico…</div>}>
+            <PerformanceChart timeline={analytics.timeline} />
+          </Suspense>
         </div>
         <div className="h-full">
-          <ConversionDonutChart companies={analytics.companies} />
+          <Suspense fallback={<div className="h-[220px] flex items-center justify-center text-xs text-gray-500 bg-white border rounded-xl">Carregando gráfico…</div>}>
+            <ConversionDonutChart companies={analytics.companies} />
+          </Suspense>
         </div>
       </div>
 
