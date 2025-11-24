@@ -50,17 +50,13 @@ async function bootstrap() {
         '- DBA: Anderson',
     )
     .setVersion('1.0.0')
-    .addTag('applications', 'Endpoints para gerenciamento de candidaturas')
-    .addTag('dashboard', 'Endpoints para estatísticas e dashboard')
-    .addTag('utilities', 'Endpoints auxiliares')
     .setContact(
       'Equipe CarrerFlow',
-      'https://github.com/seu-repo/carrerflow',
+      'https://github.com/CarrerFlow-Inc/CarrerFlow',
       'contato@carrerflow.com',
     )
     .setLicense('MIT', 'https://opensource.org/licenses/MIT')
     .addServer('http://localhost:3000', 'Desenvolvimento Local')
-    .addServer('https://api.carrerflow.com', 'Produção')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

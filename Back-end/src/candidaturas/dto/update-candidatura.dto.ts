@@ -40,6 +40,14 @@ export class UpdateCandidaturaDto extends PartialType(CreateCandidaturaDto) {
   observacoes?: string;
 
   @ApiPropertyOptional({
+    description: 'Fonte da Vaga (LinkedIn, Indeed, etc.)',
+    example: 'LinkedIn',
+  })
+  @IsString()
+  @IsOptional()
+  linkVaga?: string;
+
+  @ApiPropertyOptional({
     description: 'Status atual da candidatura',
     enum: StatusCandidatura,
     example: StatusCandidatura.ENTREVISTA_RH,

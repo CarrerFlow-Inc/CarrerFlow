@@ -30,6 +30,11 @@ export class CreateCandidaturaDto {
   @IsString()
   dataCandidatura!: Date;
 
+  @ApiPropertyOptional({ description: 'Fonte da Vaga (LinkedIn, Indeed, etc.)' })
+  @IsString()
+  @IsOptional()
+  linkVaga!: string;
+
   @ApiPropertyOptional({
     description: 'Anotações sobre a candidatura',
     example:

@@ -8,5 +8,6 @@ import { Candidatura } from './entities/candidatura.entity';
   imports: [TypeOrmModule.forFeature([Candidatura])],
   controllers: [CandidaturasController],
   providers: [CandidaturasService],
+  exports: [CandidaturasService],
 })
 export class CandidaturasModule {}

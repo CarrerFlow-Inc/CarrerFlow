@@ -39,4 +39,12 @@ export class FilterCandidaturaDto {
   @IsString()
   @IsOptional()
   orderBy?: 'ASC' | 'DESC';
+
+  @ApiPropertyOptional({
+    description: 'Fonte da Vaga (LinkedIn, Indeed, etc.)',
+    example: 'https://techsolutions.com/vagas/desenvolvedor-fullstack-junior',
+  })
+  @IsString()
+  @IsOptional()
+  linkVaga?: string;
 }
