@@ -18,19 +18,26 @@ export default function Dashboard() {
   const [range, setRange] = React.useState("30d");
   const [recentPage, setRecentPage] = React.useState(1);
   const [recentMeta, setRecentMeta] = React.useState({ total: 0, page: 1, perPage: 6, totalPages: 1 });
-  const mockLembretes = [
-    { id: 101, label: 'Follow-up entrevista técnica', date: '2025-09-21T10:00:00Z' },
-    { id: 102, label: 'Enviar teste técnico', date: '2025-09-22T12:00:00Z' }
-  ];
-  const now = new Date();
-  const upcoming = mockLembretes
-    .map(l => ({ ...l, d: new Date(l.date) }))
-    .filter(l => l.d >= now)
-    .sort((a,b) => a.d - b.d);
-  const nextLembrete = upcoming[0];
-  const diffMs = nextLembrete ? (nextLembrete.d - now) : null;
-  const diffHours = diffMs ? diffMs / (1000*60*60) : null;
-  const isUrgent = diffHours !== null && diffHours <= 48;
+  // Deriva lembretes reais das candidaturas do usuário (persistidos)
+  const [nextLembrete, setNextLembrete] = React.useState(null);
+  const [isUrgent, setIsUrgent] = React.useState(false);
+  React.useEffect(() => {
+    if (!user) return;
+    const all = api.getCandidaturas(user.id, { page:1, perPage: 1000 }).items;
+    const withReminders = all
+      .filter(c => c.lembrete)
+      .map(c => ({ id: c.id, label: c.title || c.company || 'Lembrete', date: c.lembrete, d: new Date(c.lembrete) }))
+      .filter(r => !isNaN(r.d.getTime()) && r.d >= new Date())
+      .sort((a,b) => a.d - b.d);
+    const first = withReminders[0] || null;
+    setNextLembrete(first);
+    if (first) {
+      const diffHours = (first.d - new Date()) / (1000*60*60);
+      setIsUrgent(diffHours <= 48);
+    } else {
+      setIsUrgent(false);
+    }
+  }, [user]);
   const navigate = useNavigate();
 
   const statusSummary = analytics.summary;
