@@ -61,7 +61,7 @@ export default function LoginForm() {
           />
           <span className="text-sm text-gray-700">Lembrar de mim</span>
         </label>
-        <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-700">
+        <a href="/forgot" className="text-sm font-medium text-indigo-600 hover:text-indigo-700">
           Esqueceu a senha?
         </a>
       </div>
