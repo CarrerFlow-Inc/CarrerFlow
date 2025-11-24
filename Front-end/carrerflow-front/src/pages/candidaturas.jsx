@@ -127,8 +127,8 @@ export default function Candidaturas() {
 
   function handleUndo() {
     if (!undoData.item || !user) return;
-    const { title, company, location, status, source, link } = undoData.item;
-    api.createCandidatura(user.id, { title, company, location, status, source, link });
+    const { title, company, location, status, source, link, anotacoes, contatos, lembrete } = undoData.item;
+    api.createCandidatura(user.id, { title, company, location, status, source, link, anotacoes: Array.isArray(anotacoes)? anotacoes: [], contatos: Array.isArray(contatos)? contatos: [], lembrete: lembrete || null });
     window.dispatchEvent(new Event('candidatura:updated'));
     if (undoData.timer) clearTimeout(undoData.timer);
     setUndoData({ item: null, timer: null });
