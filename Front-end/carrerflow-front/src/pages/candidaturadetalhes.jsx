@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Plus, Edit, Trash2, Home, Briefcase } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Plus, Edit, Trash2 } from 'lucide-react';
 import AnotacoesSection from '../components/candidaturas/anotacoessection';
 import LembreteSection from '../components/candidaturas/lembretesection';
 import ContatosSection from '../components/candidaturas/contatossection';
+const CandidaturaForm = React.lazy(() => import('../components/candidaturas/candidaturaform'));
 import Badge from '../components/ui/badge';
 import { getStatusLabel, getStatusTone } from '../utils/statusColors';
 import { api } from '../services/api';
@@ -20,6 +21,7 @@ const CandidaturaDetalhes = () => {
   const { user } = useAuth();
   const [candidatura, setCandidatura] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   useEffect(() => {
     if (!id || !user) return;
@@ -78,38 +80,49 @@ const CandidaturaDetalhes = () => {
       texto,
       data: new Date().toISOString(),
     };
-    setCandidatura((prev) => ({
-      ...prev,
-      anotacoes: [...(prev.anotacoes || []), novaAnotacao],
-    }));
+    setCandidatura((prev) => {
+      const updated = {
+        ...prev,
+        anotacoes: [...(prev.anotacoes || []), novaAnotacao],
+      };
+      try { api.updateCandidatura(prev.id, { anotacoes: updated.anotacoes }); } catch {}
+      return updated;
+    });
     window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'success', message: 'Anotação adicionada' } }));
   };
 
   const handleDeleteAnotacao = (idx) => {
-    setCandidatura((prev) => ({
-      ...prev,
-      anotacoes: prev.anotacoes.filter((_, i) => i !== idx)
-    }));
+    setCandidatura((prev) => {
+      const nextNotes = prev.anotacoes.filter((_, i) => i !== idx);
+      try { api.updateCandidatura(prev.id, { anotacoes: nextNotes }); } catch {}
+      return { ...prev, anotacoes: nextNotes };
+    });
     window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'info', message: 'Anotação removida' } }));
   };
 
   const handleEditAnotacao = (idx, texto) => {
-    setCandidatura((prev) => ({
-      ...prev,
-      anotacoes: prev.anotacoes.map((a,i) => i===idx ? { ...a, texto } : a)
-    }));
+    setCandidatura((prev) => {
+      const nextNotes = prev.anotacoes.map((a,i) => i===idx ? { ...a, texto } : a);
+      try { api.updateCandidatura(prev.id, { anotacoes: nextNotes }); } catch {}
+      return { ...prev, anotacoes: nextNotes };
+    });
     window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'success', message: 'Anotação atualizada' } }));
   };
 
   const handleSetLembrete = (data) => {
-    setCandidatura((prev) => ({ ...prev, lembrete: data }));
+    setCandidatura((prev) => {
+      const updated = { ...prev, lembrete: data };
+      try { api.updateCandidatura(prev.id, { lembrete: data }); } catch {}
+      return updated;
+    });
   };
 
   const handleAddContato = (contato) => {
-    setCandidatura((prev) => ({
-      ...prev,
-      contatos: [...(prev.contatos || []), contato],
-    }));
+    setCandidatura((prev) => {
+      const nextContatos = [...(prev.contatos || []), contato];
+      try { api.updateCandidatura(prev.id, { contatos: nextContatos }); } catch {}
+      return { ...prev, contatos: nextContatos };
+    });
   };
 
   return (
@@ -124,7 +137,7 @@ const CandidaturaDetalhes = () => {
         actions={(
           <div className="flex items-center gap-2 flex-wrap">
             <Badge tone={getStatusTone(candidatura.status)}>{getStatusLabel(candidatura.status)}</Badge>
-            <Button variant="outline" onClick={() => window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'info', message: 'Edição estará disponível em breve.' } }))} aria-label="Editar candidatura">
+            <Button variant="outline" onClick={() => setEditOpen(true)} aria-label="Editar candidatura">
               <Edit size={14} /> Editar
             </Button>
             <Button variant="danger" onClick={() => setConfirmDelete(true)} aria-label="Excluir candidatura">
@@ -213,6 +226,39 @@ const CandidaturaDetalhes = () => {
               Confirmar
             </Button>
           </div>
+        </div>
+      </Modal>
+      <Modal open={editOpen} onClose={() => setEditOpen(false)} ariaLabel="Editar candidatura">
+        <div className="max-w-lg">
+          <h3 className="text-lg font-semibold mb-4">Editar Candidatura</h3>
+          <Suspense fallback={<div className="p-4 text-sm text-gray-500">Carregando…</div>}>
+            <CandidaturaForm
+              initial={{
+                id: candidatura.id,
+                title: candidatura.vaga,
+                company: candidatura.empresa,
+                createdAt: candidatura.data,
+                source: candidatura.fonte,
+                status: candidatura.status,
+                link: candidatura.link || ''
+              }}
+              onCancel={() => setEditOpen(false)}
+              onSave={(payload) => {
+                api.updateCandidatura(candidatura.id, payload);
+                setCandidatura(prev => ({
+                  ...prev,
+                  vaga: payload.title,
+                  empresa: payload.company,
+                  data: payload.createdAt,
+                  fonte: payload.source,
+                  status: payload.status,
+                  link: payload.link || ''
+                }));
+                window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'success', message: 'Candidatura atualizada' } }));
+                setEditOpen(false);
+              }}
+            />
+          </Suspense>
         </div>
       </Modal>
     </div>
