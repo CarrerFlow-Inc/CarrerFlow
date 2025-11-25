@@ -19,4 +19,5 @@ export class User {
 
   @Column({ nullable: true })
   name!: string;
+    lembretes: any;
 }

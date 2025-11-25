@@ -95,4 +95,26 @@ export class CandidaturasService {
     const candidatura = await this.findOne(id, userId);
     await this.candidaturasRepository.remove(candidatura);
   }
+
+  //Obter contagem de candidaturas por status
+  async getStatusCounts(userId: string): Promise<Record<string, number>> {
+    const result = await this.candidaturasRepository
+      .createQueryBuilder('candidatura')
+      .select('candidatura.status', 'status')
+      .addSelect('COUNT(*)', 'count')
+      .where('candidatura.userId = :userId', { userId })
+      .groupBy('candidatura.status')
+      .getRawMany();
+    
+    const statusCounts = {};
+    Object.values(StatusCandidatura).forEach(status => {
+      statusCounts[status] = 0;
+    });
+
+    result.forEach(item => {
+      statusCounts[item.status] = parseInt(item.count);
+    });
+
+    return statusCounts;
+  }
 }

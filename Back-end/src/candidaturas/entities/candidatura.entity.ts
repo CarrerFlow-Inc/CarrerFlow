@@ -63,6 +63,13 @@ export class Candidatura {
   dataCandidatura!: Date;
 
   @ApiProperty({
+    description: 'Link para a vaga',
+    example: 'https://techsolutions.com/vagas/desenvolvedor-fullstack-junior',
+  })
+  @Column({ type: 'text', nullable: true })
+  linkVaga!: string | null;
+
+  @ApiProperty({
     description: 'Status atual da candidatura',
     enum: StatusCandidatura,
     example: StatusCandidatura.APLICADA,
@@ -96,4 +103,6 @@ export class Candidatura {
   // Mapear explicitamente para o nome de coluna `updatedAt` usado em queries
   @UpdateDateColumn({ name: 'updatedAt' })
   dataAtualizacao!: Date;
+  lembretes: any;
+  createdAt: string | number | Date | undefined;
 }
