@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../components/ui/card";
 import Button from "../components/ui/button";
@@ -6,7 +6,8 @@ import Badge from "../components/ui/badge";
 import { api } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 import Modal from "../components/ui/modal";
-import CandidaturaForm from "../components/candidaturas/candidaturaform";
+// Lazy load form only when modal opened
+const CandidaturaForm = React.lazy(() => import("../components/candidaturas/candidaturaform"));
 import Pagination from "../components/ui/pagination";
 import { Search, Pencil, Trash2, Plus } from "lucide-react";
 import SectionHeader from "../components/ui/sectionheader";
@@ -126,8 +127,8 @@ export default function Candidaturas() {
 
   function handleUndo() {
     if (!undoData.item || !user) return;
-    const { title, company, location, status, source, link } = undoData.item;
-    api.createCandidatura(user.id, { title, company, location, status, source, link });
+    const { title, company, location, status, source, link, anotacoes, contatos, lembrete } = undoData.item;
+    api.createCandidatura(user.id, { title, company, location, status, source, link, anotacoes: Array.isArray(anotacoes)? anotacoes: [], contatos: Array.isArray(contatos)? contatos: [], lembrete: lembrete || null });
     window.dispatchEvent(new Event('candidatura:updated'));
     if (undoData.timer) clearTimeout(undoData.timer);
     setUndoData({ item: null, timer: null });
@@ -372,7 +373,9 @@ export default function Candidaturas() {
       <Modal open={openModal} onClose={() => { setOpenModal(false); setEditing(null); }} ariaLabel={editing ? "Editar candidatura" : "Nova candidatura"}>
         <div className="max-w-lg">
           <h3 className="text-lg font-semibold mb-4">{editing ? "Editar Candidatura" : "Nova Candidatura"}</h3>
-          <CandidaturaForm initial={editing || {}} onCancel={() => { setOpenModal(false); setEditing(null); }} onSave={handleSave} />
+          <Suspense fallback={<div className="p-4 text-sm text-gray-500">Carregando formulário…</div>}>
+            <CandidaturaForm initial={editing || {}} onCancel={() => { setOpenModal(false); setEditing(null); }} onSave={handleSave} />
+          </Suspense>
         </div>
       </Modal>
 

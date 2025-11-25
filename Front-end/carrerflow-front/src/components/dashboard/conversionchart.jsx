@@ -11,10 +11,10 @@ export default function ConversionDonutChart({ companies = [] }) {
   }, [companies]);
 
   return (
-    <Card hoverable>
+    <Card hoverable className="h-full flex flex-col">
       <div className="text-sm font-medium mb-3">Candidaturas por empresa</div>
-      <div style={{ width: "100%", height: 200 }}>
-        <ResponsiveContainer>
+      <div className="flex-1 h-[220px]">
+        <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={data} innerRadius={50} outerRadius={80} dataKey="value">
               {data.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}

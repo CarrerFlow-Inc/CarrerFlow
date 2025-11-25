@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Calendar, Plus, Trash2, Pencil } from 'lucide-react';
+import { Calendar, Plus, Trash2, Pencil, StickyNote } from 'lucide-react';
 import { formatRelative } from '../../utils/time';
 import Button from '../ui/button';
 
+const MAX_NOTES = 5;
 const AnotacoesSection = ({ anotacoes = [], onAddAnotacao, onDeleteAnotacao, onEditAnotacao, containerId = "anotacoes-section", textAreaId = "nova-anotacao" }) => {
   const [novaAnotacao, setNovaAnotacao] = useState('');
   const [editingIdx, setEditingIdx] = useState(null);
@@ -10,17 +11,20 @@ const AnotacoesSection = ({ anotacoes = [], onAddAnotacao, onDeleteAnotacao, onE
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (novaAnotacao.trim()) {
-      onAddAnotacao(novaAnotacao);
-      setNovaAnotacao('');
+    if (!novaAnotacao.trim()) return;
+    if (anotacoes.length >= MAX_NOTES) {
+      window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'warning', message: `Limite de ${MAX_NOTES} anotações atingido` } }));
+      return;
     }
+    onAddAnotacao(novaAnotacao.trim());
+    setNovaAnotacao('');
   };
 
   return (
     <div id={containerId} className="bg-white p-4 rounded-lg shadow">
       <h3 className="text-lg font-semibold mb-3 flex items-center">
-        <Plus className="mr-2" size={18} />
-        Adicionar Anotação
+        <StickyNote className="mr-2" size={18} />
+        Anotações
       </h3>
       <form onSubmit={handleSubmit} className="mb-4">
         <textarea
@@ -36,12 +40,15 @@ const AnotacoesSection = ({ anotacoes = [], onAddAnotacao, onDeleteAnotacao, onE
             type="submit"
             variant="charcoal"
             aria-label="Salvar anotação"
-            disabled={!novaAnotacao.trim()}
+            disabled={!novaAnotacao.trim() || anotacoes.length >= MAX_NOTES}
             className="text-sm"
           >
-            Salvar Anotação
+            {anotacoes.length >= MAX_NOTES ? 'Limite atingido' : 'Salvar Anotação'}
           </Button>
         </div>
+        {anotacoes.length >= MAX_NOTES && (
+          <p className="mt-2 text-xs text-red-600">Você atingiu o máximo de {MAX_NOTES} anotações para esta candidatura.</p>
+        )}
       </form>
 
       {anotacoes.length === 0 && (
@@ -51,37 +58,70 @@ const AnotacoesSection = ({ anotacoes = [], onAddAnotacao, onDeleteAnotacao, onE
       )}
       {anotacoes.length > 0 && (
         <div className="mt-6">
-          <h4 className="font-medium text-gray-700 mb-2">Anotações Anteriores</h4>
-          <div className="space-y-3">
-            {[...anotacoes].sort((a,b)=> new Date(b.data) - new Date(a.data)).map((anot, idx) => (
-              <div key={idx} className="rounded-lg border px-3 py-2 bg-gray-50 relative">
+          <h4 className="font-medium text-gray-700 mb-3">Anotações ({anotacoes.length}/{MAX_NOTES})</h4>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {[...anotacoes].sort((a,b)=> new Date(b.data) - new Date(a.data)).map((anot, idx) => {
+              const isNew = Date.now() - new Date(anot.data).getTime() < 1500;
+              return (
+              <div
+                key={idx}
+                className={`relative group bg-[#FFF9C4] border border-yellow-200 rounded-xl p-3 shadow-sm before:absolute before:-top-2 before:left-3 before:w-5 before:h-5 before:bg-yellow-300 before:rotate-6 before:rounded-sm before:shadow before:opacity-70 transition-colors ${isNew ? 'animate-note-enter' : ''}`}
+              >
                 {editingIdx === idx ? (
-                  <div className="space-y-2">
-                    <textarea value={editValue} onChange={(e)=>setEditValue(e.target.value)} className="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" rows={3} />
+                  <div className="space-y-2" aria-label="Editando anotação">
+                    <textarea
+                      value={editValue}
+                      onChange={(e)=>setEditValue(e.target.value)}
+                      className="w-full border border-yellow-300 bg-yellow-50 rounded-md p-2 text-sm focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+                      rows={3}
+                      aria-label="Conteúdo da anotação"
+                    />
                     <div className="flex gap-2 justify-end">
-                      <button onClick={()=>{ setEditingIdx(null); setEditValue(''); }} className="px-2 py-1 text-xs border rounded-md">Cancelar</button>
-                      <button onClick={()=>{ onEditAnotacao && onEditAnotacao(idx, editValue); setEditingIdx(null); setEditValue(''); }} className="px-2 py-1 text-xs bg-blue-600 text-white rounded-md">Salvar</button>
+                      <button
+                        onClick={()=>{ setEditingIdx(null); setEditValue(''); }}
+                        className="px-2 py-1 text-xs border rounded-md"
+                        aria-label="Cancelar edição"
+                      >Cancelar</button>
+                      <button
+                        disabled={!editValue.trim()}
+                        onClick={()=>{
+                          if(!editValue.trim()) { window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'warning', message: 'Texto vazio não pode ser salvo' } })); return; }
+                          onEditAnotacao && onEditAnotacao(idx, editValue.trim());
+                          setEditingIdx(null); setEditValue('');
+                          window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'success', message: 'Anotação atualizada' } }));
+                        }}
+                        className="px-2 py-1 text-xs bg-gray-900 text-white rounded-md disabled:opacity-40 disabled:cursor-not-allowed"
+                        aria-label="Salvar alterações"
+                      >Salvar</button>
                     </div>
                   </div>
                 ) : (
                   <>
-                    <p className="text-sm text-gray-800">{anot.texto}</p>
-                    <p className="type-caption flex items-center mt-1">
+                    <p className="text-sm text-gray-900 whitespace-pre-line min-h-[54px]">{anot.texto}</p>
+                    <p className="type-caption flex items-center mt-2 text-yellow-800">
                       <Calendar size={12} className="mr-1" />
                       {formatRelative(anot.data)}
                     </p>
-                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 hover:opacity-100 transition-opacity">
-                      <button onClick={()=>{ setEditingIdx(idx); setEditValue(anot.texto); }} className="p-1 rounded hover:bg-white" aria-label="Editar anotação">
-                        <Pencil size={14} className="text-gray-600" />
+                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={()=>{ setEditingIdx(idx); setEditValue(anot.texto); }}
+                        className="p-1 rounded hover:bg-yellow-200"
+                        aria-label="Editar anotação"
+                      >
+                        <Pencil size={14} className="text-gray-700" />
                       </button>
-                      <button onClick={()=>{ if(window.confirm('Excluir anotação?')) onDeleteAnotacao && onDeleteAnotacao(idx); }} className="p-1 rounded hover:bg-white" aria-label="Excluir anotação">
+                      <button
+                        onClick={()=>{ if(window.confirm('Excluir anotação?')) { onDeleteAnotacao && onDeleteAnotacao(idx); window.dispatchEvent(new CustomEvent('toast:show', { detail: { type: 'info', message: 'Anotação removida' } })); } }}
+                        className="p-1 rounded hover:bg-yellow-200"
+                        aria-label="Excluir anotação"
+                      >
                         <Trash2 size={14} className="text-red-600" />
                       </button>
                     </div>
                   </>
                 )}
               </div>
-            ))}
+            )})}
           </div>
         </div>
       )}

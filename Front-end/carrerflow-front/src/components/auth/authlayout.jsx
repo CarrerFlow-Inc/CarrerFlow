@@ -1,11 +1,14 @@
-import React from "react";
-import AuthSlider from "./authslider";
+import React, { Suspense } from "react";
+// Lazy load heavy slider (Swiper) only on auth pages when visible
+const AuthSlider = React.lazy(() => import("./authslider"));
 export default function AuthLayout({ title, subtitle, children, footer }) {
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
       <div className="hidden md:block">
         <div className="h-full">
-          <AuthSlider />
+          <Suspense fallback={<div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white/70 text-sm">Carregando…</div>}>
+            <AuthSlider />
+          </Suspense>
         </div>
       </div>
       <div className="flex items-center justify-center p-6 sm:p-10 bg-gray-50">

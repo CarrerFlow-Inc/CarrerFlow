@@ -8,18 +8,29 @@ import 'swiper/css/effect-fade';
 
 
 const Slide = ({ icon, title, text }) => (
-  <div className="h-full flex flex-col items-start justify-center gap-4 text-white/90 px-8">
+  <div className="h-full flex flex-col items-center justify-center gap-4 text-white/90 px-8 md:px-12">
     <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/15">
       {icon}
     </div>
-    <h3 className="text-3xl font-bold leading-tight text-white">{title}</h3>
-    <p className="text-base max-w-md">{text}</p>
+    <div className="max-w-xl text-center">
+      <h3 className="text-3xl md:text-4xl font-bold leading-tight text-white">{title}</h3>
+      <p className="mt-2 text-base md:text-lg">{text}</p>
+    </div>
   </div>
 );
 
 export default function AuthSlider() {
   return (
-    <div className="relative h-full w-full overflow-hidden">
+    <div
+      className="relative h-full w-full overflow-hidden"
+      style={{
+        '--swiper-theme-color': '#ffffff',
+        '--swiper-pagination-bullet-inactive-color': 'rgba(255,255,255,0.35)',
+        '--swiper-pagination-bullet-inactive-opacity': 1,
+        '--swiper-pagination-bullet-size': '8px',
+        '--swiper-pagination-bullet-horizontal-gap': '6px',
+      }}
+    >
       <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-[#111827] to-black" />
       <div className="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-white/10 blur-2xl" />
       <div className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-white/10 blur-3xl" />

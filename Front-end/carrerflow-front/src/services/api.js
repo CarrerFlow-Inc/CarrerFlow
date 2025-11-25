@@ -193,6 +193,11 @@ export const api = {
       createdAt: candidatura.createdAt
         ? candidatura.createdAt
         : new Date().toISOString(),
+      anotacoes: Array.isArray(candidatura.anotacoes)
+        ? candidatura.anotacoes
+        : [],
+      contatos: Array.isArray(candidatura.contatos) ? candidatura.contatos : [],
+      lembrete: candidatura.lembrete || null,
     };
     db.candidaturas.push(newItem);
     _writeDb(db);
@@ -215,7 +220,31 @@ export const api = {
     const db = _readDb();
     const idx = db.candidaturas.findIndex((c) => c.id === id);
     if (idx === -1) throw new Error("Não encontrado");
-    db.candidaturas[idx] = { ...db.candidaturas[idx], ...patch };
+    const safePatch = { ...patch };
+    if ("anotacoes" in safePatch && !Array.isArray(safePatch.anotacoes)) {
+      delete safePatch.anotacoes;
+    }
+    if ("contatos" in safePatch && !Array.isArray(safePatch.contatos)) {
+      delete safePatch.contatos;
+    }
+    db.candidaturas[idx] = {
+      ...db.candidaturas[idx],
+      ...safePatch,
+      anotacoes: Array.isArray(safePatch.anotacoes)
+        ? safePatch.anotacoes
+        : Array.isArray(db.candidaturas[idx].anotacoes)
+        ? db.candidaturas[idx].anotacoes
+        : [],
+      contatos: Array.isArray(safePatch.contatos)
+        ? safePatch.contatos
+        : Array.isArray(db.candidaturas[idx].contatos)
+        ? db.candidaturas[idx].contatos
+        : [],
+      lembrete:
+        safePatch.lembrete !== undefined
+          ? safePatch.lembrete
+          : db.candidaturas[idx].lembrete || null,
+    };
     _writeDb(db);
     try {
       window.dispatchEvent(
